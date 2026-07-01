@@ -349,5 +349,12 @@ async def servers(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
+async def main():
+    async with bot:
+        await bot.load_extension("announcements")
+        await bot.start(DISCORD_TOKEN)
+
+
 if __name__ == "__main__":
-    bot.run(DISCORD_TOKEN)
+    import asyncio
+    asyncio.run(main())
