@@ -30,6 +30,8 @@ STEAM_NEWS_URL = (
     "?appid=252950&count=10&maxlength=400"
 )
 REDDIT_RSS_URL = "https://www.reddit.com/r/RocketLeagueEsports/.rss"
+REDDIT_TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
+REDDIT_OAUTH_URL = "https://oauth.reddit.com/r/RocketLeagueEsports/new?limit=25&raw_json=1"
 
 CATEGORIES = ["rlcs", "updates", "news"]
 COLORS = {"rlcs": 0xE67E22, "updates": 0x57F287, "news": 0x5865F2}
@@ -95,6 +97,8 @@ class Announcements(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.state = self._load_state()
+        self._reddit_token = None
+        self._reddit_token_expiry = 0.0
         self.rlcs_loop.start()
         self.updates_loop.start()
         self.news_loop.start()
@@ -161,7 +165,42 @@ class Announcements(commands.Cog):
         return data.get("appnews", {}).get("newsitems", [])
 
     async def _fetch_reddit(self) -> list:
+        """Prefers the authenticated Reddit API (needed on cloud hosts — Reddit
+        429s datacenter IPs on the public RSS feed). Falls back to RSS when
+        REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET aren't set."""
+        client_id = os.getenv("REDDIT_CLIENT_ID")
+        client_secret = os.getenv("REDDIT_CLIENT_SECRET")
+        if client_id and client_secret:
+            return await self._fetch_reddit_oauth(client_id, client_secret)
         return parse_reddit_atom(await self._get(REDDIT_RSS_URL, as_json=False))
+
+    async def _fetch_reddit_oauth(self, client_id: str, client_secret: str) -> list:
+        now = time.time()
+        timeout = aiohttp.ClientTimeout(total=30)
+        async with aiohttp.ClientSession(headers={"User-Agent": USER_AGENT}, timeout=timeout) as session:
+            if not self._reddit_token or now >= self._reddit_token_expiry:
+                auth = aiohttp.BasicAuth(client_id, client_secret)
+                async with session.post(REDDIT_TOKEN_URL, auth=auth,
+                                        data={"grant_type": "client_credentials"}) as resp:
+                    resp.raise_for_status()
+                    tok = await resp.json()
+                self._reddit_token = tok["access_token"]
+                self._reddit_token_expiry = now + tok.get("expires_in", 3600) - 300
+            async with session.get(REDDIT_OAUTH_URL,
+                                   headers={"Authorization": f"Bearer {self._reddit_token}"}) as resp:
+                resp.raise_for_status()
+                data = await resp.json()
+        entries = []
+        for child in data.get("data", {}).get("children", []):
+            d = child.get("data", {})
+            if d.get("name") and d.get("title"):
+                entries.append({
+                    "id": d["name"],  # t3_xxx — same format as RSS entry ids
+                    "title": d["title"],
+                    "url": "https://www.reddit.com" + d.get("permalink", ""),
+                    "author": "/u/" + d.get("author", "unknown"),
+                })
+        return entries
 
     # ── embed builders ───────────────────────────────────────────────────────
 
@@ -347,6 +386,15 @@ class Announcements(commands.Cog):
                     return
                 await target.send(embed=self._reddit_embed(entries[0]))
             await interaction.followup.send(f"✅ Test posted to {target.mention}.")
+        except aiohttp.ClientResponseError as e:
+            if e.status == 429 and "reddit" in str(e.request_info.url):
+                await interaction.followup.send(
+                    "❌ Reddit is rate-limiting this server's IP. "
+                    "Set `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` in the host's "
+                    "environment variables to use the authenticated API instead."
+                )
+            else:
+                await interaction.followup.send(f"❌ Test failed: {e}")
         except Exception as e:
             await interaction.followup.send(f"❌ Test failed: {e}")
 
