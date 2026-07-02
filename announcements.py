@@ -32,6 +32,10 @@ STEAM_NEWS_URL = (
 REDDIT_RSS_URL = "https://www.reddit.com/r/RocketLeagueEsports/.rss"
 REDDIT_TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
 REDDIT_OAUTH_URL = "https://oauth.reddit.com/r/RocketLeagueEsports/new?limit=25&raw_json=1"
+GOOGLE_NEWS_URL = (
+    "https://news.google.com/rss/search"
+    "?q=%22rocket+league%22+when:7d&hl=en-US&gl=US&ceid=US:en"
+)
 
 CATEGORIES = ["rlcs", "updates", "news"]
 COLORS = {"rlcs": 0xE67E22, "updates": 0x57F287, "news": 0x5865F2}
@@ -88,6 +92,23 @@ def parse_reddit_atom(xml_text: str) -> list:
         url = link.get("href") if link is not None else ""
         if eid and title:
             entries.append({"id": eid, "title": title, "url": url, "author": author})
+    return entries
+
+
+def parse_gnews_rss(xml_text: str) -> list:
+    """Returns [{id, title, url, author}] from a Google News RSS feed."""
+    entries = []
+    root = ET.fromstring(xml_text)
+    for item in root.findall(".//item"):
+        guid = item.findtext("guid", "")
+        title = item.findtext("title", "")
+        if guid and title:
+            entries.append({
+                "id": guid,
+                "title": title,
+                "url": item.findtext("link", ""),
+                "author": item.findtext("source", "Google News"),
+            })
     return entries
 
 
@@ -164,10 +185,18 @@ class Announcements(commands.Cog):
         data = await self._get(STEAM_NEWS_URL, as_json=True)
         return data.get("appnews", {}).get("newsitems", [])
 
+    async def _fetch_news(self) -> list:
+        """Google News is the primary source (works from cloud IPs, no signup).
+        Reddit is added best-effort: it 429s from datacenter IPs unless
+        REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET are set for the real API."""
+        entries = parse_gnews_rss(await self._get(GOOGLE_NEWS_URL, as_json=False))
+        try:
+            entries += await self._fetch_reddit()
+        except Exception as e:
+            print(f"[announce:news] reddit unavailable (fine, google news still works): {e}")
+        return entries
+
     async def _fetch_reddit(self) -> list:
-        """Prefers the authenticated Reddit API (needed on cloud hosts — Reddit
-        429s datacenter IPs on the public RSS feed). Falls back to RSS when
-        REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET aren't set."""
         client_id = os.getenv("REDDIT_CLIENT_ID")
         client_secret = os.getenv("REDDIT_CLIENT_SECRET")
         if client_id and client_secret:
@@ -227,14 +256,14 @@ class Announcements(commands.Cog):
             embed.timestamp = datetime.fromtimestamp(item["date"], tz=timezone.utc)
         return embed
 
-    def _reddit_embed(self, entry: dict) -> discord.Embed:
+    def _news_embed(self, entry: dict) -> discord.Embed:
         embed = discord.Embed(
             title="📰 " + entry["title"][:250],
             url=entry["url"],
-            description=f"Posted by {entry['author']} on r/RocketLeagueEsports",
+            description=f"via {entry['author']}",
             color=COLORS["news"],
         )
-        embed.set_footer(text="Pentathletes • r/RocketLeagueEsports")
+        embed.set_footer(text="Pentathletes • Rocket League News")
         return embed
 
     # ── loops ────────────────────────────────────────────────────────────────
@@ -292,7 +321,7 @@ class Announcements(commands.Cog):
         if not channel:
             return
         try:
-            entries = await self._fetch_reddit()
+            entries = await self._fetch_news()
         except Exception as e:
             print(f"[announce:news] fetch failed: {e}")
             return
@@ -303,7 +332,7 @@ class Announcements(commands.Cog):
             self._mark_seen("news", entry["id"])
             if first_run:
                 continue
-            await channel.send(embed=self._reddit_embed(entry))
+            await channel.send(embed=self._news_embed(entry))
         if first_run:
             print(f"[announce:news] first run — seeded {len(entries)} posts silently")
         self._save_state()
@@ -380,11 +409,11 @@ class Announcements(commands.Cog):
                 item = (official or items)[0]
                 await target.send(embed=self._steam_embed(item, bool(official)))
             else:
-                entries = await self._fetch_reddit()
+                entries = await self._fetch_news()
                 if not entries:
-                    await interaction.followup.send("No Reddit posts found.")
+                    await interaction.followup.send("No news found.")
                     return
-                await target.send(embed=self._reddit_embed(entries[0]))
+                await target.send(embed=self._news_embed(entries[0]))
             await interaction.followup.send(f"✅ Test posted to {target.mention}.")
         except aiohttp.ClientResponseError as e:
             if e.status == 429 and "reddit" in str(e.request_info.url):
