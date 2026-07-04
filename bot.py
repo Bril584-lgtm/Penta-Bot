@@ -146,12 +146,14 @@ async def on_message(message):
 async def query_claude(question: str) -> str:
     try:
         msg = ai.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
+            thinking={"type": "disabled"},  # keep replies fast; Sonnet 5 defaults to adaptive thinking when omitted
             system=RR_CONTEXT,
             messages=[{"role": "user", "content": question}]
         )
-        return msg.content[0].text
+        return next((b.text for b in msg.content if b.type == "text"),
+                    "I couldn't come up with a response — try rephrasing?")
     except Exception as e:
         return f"Something went wrong reaching the AI: {e}"
 
