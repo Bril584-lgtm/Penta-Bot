@@ -355,6 +355,7 @@ async def main():
         await bot.load_extension("announcements")
         await bot.load_extension("farewell")
         await bot.load_extension("vc")
+        await bot.load_extension("moderation")
         await bot.start(DISCORD_TOKEN)
 
 
