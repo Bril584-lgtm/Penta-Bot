@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -14,6 +15,7 @@ RR_CONTEXT = """
 You are Penta-Bot, the official assistant for the Pentathletes Discord server.
 Pentathletes is a Rocket League esports org competing primarily in the Titans division of Rocket Rivals.
 You can answer ANY question members ask — general knowledge, Rocket League gameplay, tech, math, whatever. Be genuinely helpful on any topic.
+You have web search and web fetch tools. For questions where current information would change the answer (recent RLCS results, patch notes, player transfers, news, prices, anything time-sensitive), search before answering rather than answering from memory. If the user shares a URL, you can fetch and read it.
 For Rocket Rivals league rules, eligibility, rosters, and tryouts specifically, answer ONLY from the reference info below — never invent league rules. If the reference doesn't cover a league question, say you're not sure and suggest asking a league admin.
 Be concise, direct, and professional. Use Discord markdown formatting where appropriate.
 
@@ -116,6 +118,11 @@ intents.members = True  # required for on_member_remove (farewell messages)
 bot = commands.Bot(command_prefix="!", intents=intents)
 ai = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
+WEB_TOOLS = [
+    {"type": "web_search_20260209", "name": "web_search", "max_uses": 5},
+    {"type": "web_fetch_20260209", "name": "web_fetch", "max_uses": 5},
+]
+
 
 @bot.event
 async def on_ready():
@@ -143,17 +150,33 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-async def query_claude(question: str) -> str:
-    try:
+def _query_claude_sync(question: str):
+    """Blocking API call with web search — runs in a thread via query_claude."""
+    messages = [{"role": "user", "content": question}]
+    msg = None
+    for _ in range(5):  # server-side tools can pause the turn; re-send to resume
         msg = ai.messages.create(
             model="claude-sonnet-5",
-            max_tokens=1024,
+            max_tokens=2048,
             thinking={"type": "disabled"},  # keep replies fast; Sonnet 5 defaults to adaptive thinking when omitted
             system=RR_CONTEXT,
-            messages=[{"role": "user", "content": question}]
+            tools=WEB_TOOLS,
+            messages=messages,
         )
-        return next((b.text for b in msg.content if b.type == "text"),
-                    "I couldn't come up with a response — try rephrasing?")
+        if msg.stop_reason != "pause_turn":
+            break
+        messages = [
+            {"role": "user", "content": question},
+            {"role": "assistant", "content": msg.content},
+        ]
+    return msg
+
+
+async def query_claude(question: str) -> str:
+    try:
+        msg = await asyncio.to_thread(_query_claude_sync, question)
+        text = "\n".join(b.text for b in msg.content if b.type == "text").strip()
+        return text or "I couldn't come up with a response — try rephrasing?"
     except Exception as e:
         return f"Something went wrong reaching the AI: {e}"
 
@@ -362,5 +385,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
