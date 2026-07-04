@@ -2,9 +2,10 @@
 
 Admin runs /setupvc once: creates a "➕ Create VC" hub channel. Anyone who
 joins the hub gets their own VC spawned and is moved into it as owner.
-Owners manage their VC with /vc lock, unlock, kick, mute, unmute, limit,
-rename; /vc claim takes over an ownerless VC. Empty temp VCs are deleted
-automatically, including leftovers swept on startup after a redeploy.
+Owners manage their VC with /vc claim, kick, limit, lock, mute, rename,
+unlock, unmute (registered alphabetically so they list in ABC order).
+Empty temp VCs are deleted automatically, including leftovers swept on
+startup after a redeploy.
 
 Bot needs: Manage Channels + Move Members (server-wide or on the category).
 """
@@ -182,27 +183,30 @@ class TempVC(commands.Cog):
         await interaction.response.send_message(
             "🛑 Temp VC system disabled. Existing temp channels will still auto-delete when empty.")
 
-    # ── /vc group ────────────────────────────────────────────────────────────
+    # ── /vc group (subcommands registered in ABC order) ─────────────────────
 
     vc = app_commands.Group(name="vc", description="Control your temp voice channel")
 
-    @vc.command(name="lock", description="Lock your VC so nobody else can join")
-    async def vc_lock(self, interaction: discord.Interaction):
-        ch, err = self._owned_vc(interaction)
-        if err:
-            await interaction.response.send_message(err, ephemeral=True)
+    @vc.command(name="claim", description="Take ownership of this VC if the owner left")
+    async def vc_claim(self, interaction: discord.Interaction):
+        ch = self._current_temp_vc(interaction)
+        if not ch:
+            await interaction.response.send_message(
+                f"You're not in a temp VC. Join **{HUB_NAME}** to create one.", ephemeral=True)
             return
-        await ch.set_permissions(interaction.guild.default_role, connect=False)
-        await interaction.response.send_message(f"🔒 {ch.mention} is locked.", ephemeral=True)
-
-    @vc.command(name="unlock", description="Unlock your VC so anyone can join")
-    async def vc_unlock(self, interaction: discord.Interaction):
-        ch, err = self._owned_vc(interaction)
-        if err:
-            await interaction.response.send_message(err, ephemeral=True)
+        owner_id = self.state["temp"].get(str(ch.id))
+        if owner_id == interaction.user.id:
+            await interaction.response.send_message("You already own this VC.", ephemeral=True)
             return
-        await ch.set_permissions(interaction.guild.default_role, connect=None)
-        await interaction.response.send_message(f"🔓 {ch.mention} is unlocked.", ephemeral=True)
+        if owner_id and any(m.id == owner_id for m in ch.members):
+            await interaction.response.send_message(
+                "The owner is still here — they keep control.", ephemeral=True)
+            return
+        self.state["temp"][str(ch.id)] = interaction.user.id
+        self._save_state()
+        await ch.set_permissions(interaction.user, connect=True, speak=True,
+                                 move_members=True, manage_channels=True)
+        await interaction.response.send_message(f"👑 You now own {ch.mention}.", ephemeral=True)
 
     @vc.command(name="kick", description="Kick someone out of your VC")
     @app_commands.describe(user="Who to kick", block="Also block them from rejoining")
@@ -225,26 +229,6 @@ class TempVC(commands.Cog):
             note = " and blocked from rejoining"
         await interaction.response.send_message(f"👢 Kicked {user.mention}{note}.", ephemeral=True)
 
-    @vc.command(name="mute", description="Mute someone in your VC")
-    @app_commands.describe(user="Who to mute")
-    async def vc_mute(self, interaction: discord.Interaction, user: discord.Member):
-        ch, err = self._owned_vc(interaction)
-        if err:
-            await interaction.response.send_message(err, ephemeral=True)
-            return
-        await ch.set_permissions(user, speak=False)
-        await interaction.response.send_message(f"🔇 Muted {user.mention} in {ch.mention}.", ephemeral=True)
-
-    @vc.command(name="unmute", description="Unmute someone in your VC")
-    @app_commands.describe(user="Who to unmute")
-    async def vc_unmute(self, interaction: discord.Interaction, user: discord.Member):
-        ch, err = self._owned_vc(interaction)
-        if err:
-            await interaction.response.send_message(err, ephemeral=True)
-            return
-        await ch.set_permissions(user, speak=None)
-        await interaction.response.send_message(f"🔊 Unmuted {user.mention}.", ephemeral=True)
-
     @vc.command(name="limit", description="Set a user cap on your VC (0 = no limit)")
     @app_commands.describe(cap="Max users, 0–99")
     async def vc_limit(self, interaction: discord.Interaction,
@@ -257,6 +241,25 @@ class TempVC(commands.Cog):
         label = "no limit" if cap == 0 else f"{cap} users"
         await interaction.response.send_message(f"👥 {ch.mention} capped at **{label}**.", ephemeral=True)
 
+    @vc.command(name="lock", description="Lock your VC so nobody else can join")
+    async def vc_lock(self, interaction: discord.Interaction):
+        ch, err = self._owned_vc(interaction)
+        if err:
+            await interaction.response.send_message(err, ephemeral=True)
+            return
+        await ch.set_permissions(interaction.guild.default_role, connect=False)
+        await interaction.response.send_message(f"🔒 {ch.mention} is locked.", ephemeral=True)
+
+    @vc.command(name="mute", description="Mute someone in your VC")
+    @app_commands.describe(user="Who to mute")
+    async def vc_mute(self, interaction: discord.Interaction, user: discord.Member):
+        ch, err = self._owned_vc(interaction)
+        if err:
+            await interaction.response.send_message(err, ephemeral=True)
+            return
+        await ch.set_permissions(user, speak=False)
+        await interaction.response.send_message(f"🔇 Muted {user.mention} in {ch.mention}.", ephemeral=True)
+
     @vc.command(name="rename", description="Rename your VC")
     @app_commands.describe(name="New channel name")
     async def vc_rename(self, interaction: discord.Interaction, name: str):
@@ -267,26 +270,24 @@ class TempVC(commands.Cog):
         await ch.edit(name=name[:100])
         await interaction.response.send_message(f"✏️ Renamed to **{name[:100]}**.", ephemeral=True)
 
-    @vc.command(name="claim", description="Take ownership of this VC if the owner left")
-    async def vc_claim(self, interaction: discord.Interaction):
-        ch = self._current_temp_vc(interaction)
-        if not ch:
-            await interaction.response.send_message(
-                f"You're not in a temp VC. Join **{HUB_NAME}** to create one.", ephemeral=True)
+    @vc.command(name="unlock", description="Unlock your VC so anyone can join")
+    async def vc_unlock(self, interaction: discord.Interaction):
+        ch, err = self._owned_vc(interaction)
+        if err:
+            await interaction.response.send_message(err, ephemeral=True)
             return
-        owner_id = self.state["temp"].get(str(ch.id))
-        if owner_id == interaction.user.id:
-            await interaction.response.send_message("You already own this VC.", ephemeral=True)
+        await ch.set_permissions(interaction.guild.default_role, connect=None)
+        await interaction.response.send_message(f"🔓 {ch.mention} is unlocked.", ephemeral=True)
+
+    @vc.command(name="unmute", description="Unmute someone in your VC")
+    @app_commands.describe(user="Who to unmute")
+    async def vc_unmute(self, interaction: discord.Interaction, user: discord.Member):
+        ch, err = self._owned_vc(interaction)
+        if err:
+            await interaction.response.send_message(err, ephemeral=True)
             return
-        if owner_id and any(m.id == owner_id for m in ch.members):
-            await interaction.response.send_message(
-                "The owner is still here — they keep control.", ephemeral=True)
-            return
-        self.state["temp"][str(ch.id)] = interaction.user.id
-        self._save_state()
-        await ch.set_permissions(interaction.user, connect=True, speak=True,
-                                 move_members=True, manage_channels=True)
-        await interaction.response.send_message(f"👑 You now own {ch.mention}.", ephemeral=True)
+        await ch.set_permissions(user, speak=None)
+        await interaction.response.send_message(f"🔊 Unmuted {user.mention}.", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
