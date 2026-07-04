@@ -15,7 +15,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "farewell_state.json")
+from statepath import state_file
+
+STATE_FILE = state_file("farewell_state.json")
 
 DEFAULT_MESSAGE = "**{name}** has left {server}. Safe travels! o7"
 FAREWELL_COLOR = 0xED4245  # discord red

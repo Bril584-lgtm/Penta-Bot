@@ -18,7 +18,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "announce_state.json")
+from statepath import state_file
+
+STATE_FILE = state_file("announce_state.json")
 
 USER_AGENT = "Penta-Bot/1.0 (https://github.com/Bril584-lgtm/Penta-Bot; batmanmovie09@gmail.com)"
 LIQUIPEDIA_URL = (

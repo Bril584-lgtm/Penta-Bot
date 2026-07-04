@@ -16,7 +16,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vc_state.json")
+from statepath import state_file
+
+STATE_FILE = state_file("vc_state.json")
 
 HUB_NAME = "➕ Create VC"
 DEFAULT_CATEGORY = "🔊 Voice Lounge"
