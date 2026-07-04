@@ -5,7 +5,8 @@ channel, optionally only those from a specific user and/or containing text.
 
 Discord only allows bulk deletion of messages younger than 14 days, so
 older messages are skipped. Bot needs Manage Messages + Read Message
-History in the channel. Commands are visible to Manage Messages mods only.
+History in the channel. Administrator-only: hidden from non-admins AND
+hard-checked in code, so server permission overrides can't expose it.
 """
 
 from datetime import datetime, timedelta, timezone
@@ -22,13 +23,25 @@ class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    async def cog_app_command_error(self, interaction: discord.Interaction,
+                                    error: app_commands.AppCommandError):
+        if isinstance(error, app_commands.MissingPermissions):
+            msg = "❌ Only **administrators** can use this command."
+            if interaction.response.is_done():
+                await interaction.followup.send(msg, ephemeral=True)
+            else:
+                await interaction.response.send_message(msg, ephemeral=True)
+            return
+        raise error
+
     @app_commands.command(name="purge", description="Delete recent messages in this channel")
     @app_commands.describe(
         amount="How many messages to delete (1–100)",
         user="Only delete messages from this user",
         contains="Only delete messages containing this text",
     )
-    @app_commands.default_permissions(manage_messages=True)
+    @app_commands.default_permissions(administrator=True)
+    @app_commands.checks.has_permissions(administrator=True)
     async def purge(self, interaction: discord.Interaction,
                     amount: app_commands.Range[int, 1, 100],
                     user: discord.Member | None = None,
