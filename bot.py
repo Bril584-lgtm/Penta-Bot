@@ -13,9 +13,9 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 RR_CONTEXT = """
 You are Penta-Bot, the official assistant for the Pentathletes Discord server.
 Pentathletes is a Rocket League esports org competing primarily in the Titans division of Rocket Rivals.
-You help players with Rocket Rivals rules, eligibility, tryout info, and general league questions.
+You can answer ANY question members ask — general knowledge, Rocket League gameplay, tech, math, whatever. Be genuinely helpful on any topic.
+For Rocket Rivals league rules, eligibility, rosters, and tryouts specifically, answer ONLY from the reference info below — never invent league rules. If the reference doesn't cover a league question, say you're not sure and suggest asking a league admin.
 Be concise, direct, and professional. Use Discord markdown formatting where appropriate.
-Never make up rules — only answer based on the information below.
 
 === ROCKET RIVALS OVERVIEW ===
 Rocket Rivals is a structured Rocket League league with 3 divisions:
@@ -111,6 +111,7 @@ Titans: https://discord.gg/SNJhsp8jXZ
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True  # required for on_member_remove (farewell messages)
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 ai = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -133,7 +134,7 @@ async def on_message(message):
     if bot.user.mentioned_in(message) and not message.mention_everyone:
         question = message.content.replace(f"<@{bot.user.id}>", "").strip()
         if not question:
-            await message.reply("What do you need? Ask me anything about Rocket Rivals or Pentathletes.")
+            await message.reply("What do you need? Ask me anything — league rules or any other question.")
             return
         async with message.channel.typing():
             response = await query_claude(question)
@@ -173,8 +174,8 @@ def split_message(text: str, limit: int = 1900) -> list:
 
 # ── /ask ──────────────────────────────────────────────────────────────────────
 
-@bot.tree.command(name="ask", description="Ask Penta-Bot about Rocket Rivals rules or league info")
-@app_commands.describe(question="Your question about the league")
+@bot.tree.command(name="ask", description="Ask Penta-Bot anything — league rules or any other question")
+@app_commands.describe(question="Your question — anything goes")
 async def ask_command(interaction: discord.Interaction, question: str):
     await interaction.response.defer()
     response = await query_claude(question)
@@ -352,6 +353,8 @@ async def servers(interaction: discord.Interaction):
 async def main():
     async with bot:
         await bot.load_extension("announcements")
+        await bot.load_extension("farewell")
+        await bot.load_extension("vc")
         await bot.start(DISCORD_TOKEN)
 
 

@@ -1,5 +1,7 @@
 .env
 announce_state.json
+farewell_state.json
+vc_state.json
 __pycache__/
 *.pyc
 *.pyo
