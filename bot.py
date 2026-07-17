@@ -6,6 +6,8 @@ import anthropic
 import os
 from dotenv import load_dotenv
 
+import rr_schedule
+
 load_dotenv()
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -117,6 +119,8 @@ Titans: https://discord.gg/SNJhsp8jXZ
 7. Once signed by a team, get verified by the bot
 8. You're eligible once signed + verified + 400 games met
 """
+
+RR_CONTEXT += rr_schedule.context_text()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -379,6 +383,78 @@ async def servers(interaction: discord.Interaction):
         inline=False
     )
     embed.set_footer(text="Pentathletes • Rocket Rivals")
+    await interaction.response.send_message(embed=embed)
+
+
+# ── /schedule ─────────────────────────────────────────────────────────────────
+
+DIV_COLORS = {"Challengers": 0x3498DB, "Legends": 0x9B59B6, "Titans": 0xE74C3C}
+DIV_EMOJI = {"Challengers": "🔵", "Legends": "🟣", "Titans": "🔴"}
+
+
+def _schedule_embed_fields(embed: discord.Embed, groups: list, division: str, limit: int = 12):
+    for stage, dlabel, day, ms in groups[:limit]:
+        day_txt = f" — {day}" if day else ""
+        lines = "\n".join(f"`{m['time']:>8}` {m['teams'][0]} vs {m['teams'][1]}" for m in ms)
+        embed.add_field(name=f"{dlabel}{day_txt} ({stage})", value=lines[:1024], inline=False)
+    if len(groups) > limit:
+        embed.add_field(name="…", value=f"+{len(groups) - limit} more match days — filter by team or stage to narrow it down.", inline=False)
+
+
+@bot.tree.command(name="schedule", description="Rocket Rivals Season 8 schedule — full or filtered by team")
+@app_commands.describe(
+    division="Which division's schedule",
+    team="Optional: only this team's matches (abbreviation or name, e.g. PT or Penta Tachyons)",
+    stage="Optional: only this stage",
+    full="Show the whole season instead of only upcoming match days",
+)
+@app_commands.choices(
+    division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS],
+    stage=[app_commands.Choice(name=s, value=s) for s in
+           ["Pre-Season", "Split 1", "Major 1", "Split 2", "Major 2"]],
+)
+async def schedule(interaction: discord.Interaction, division: app_commands.Choice[str],
+                   team: str = None, stage: app_commands.Choice[str] = None, full: bool = False):
+    div = division.value
+    stage_name = stage.value if stage else None
+    team_ab = None
+    if team:
+        team_ab = rr_schedule.resolve_team(div, team)
+        if not team_ab:
+            await interaction.response.send_message(
+                f"Couldn't find a team matching **{team}** in {div}. "
+                f"Teams: {', '.join(rr_schedule.DATA['divisions'][div]['teams'])}",
+                ephemeral=True)
+            return
+
+    if full or stage_name:
+        groups = rr_schedule.matches_by_date(div, stage_name=stage_name, team=team_ab)
+    else:
+        groups = rr_schedule.upcoming(div, team=team_ab)
+
+    title = f"{DIV_EMOJI[div]} RRS8 {div.upper()} — SCHEDULE"
+    bits = []
+    if team_ab:
+        bits.append(f"Team: **{rr_schedule.team_display(div, team_ab)}**")
+    if stage_name:
+        bits.append(f"Stage: **{stage_name}**")
+    if not full and not stage_name:
+        bits.append("Showing upcoming match days (use `full: True` for the whole season)")
+    embed = discord.Embed(title=title, description="\n".join(bits) or None, color=DIV_COLORS[div])
+
+    if groups:
+        _schedule_embed_fields(embed, groups, div)
+    else:
+        embed.add_field(name="No matches found",
+                        value="Nothing scheduled for that filter yet — matchups may still be TBD.",
+                        inline=False)
+    tbd = rr_schedule.unscheduled_stages(div)
+    if tbd and not team_ab and not stage_name:
+        embed.add_field(
+            name="📅 Dates locked, matchups TBD",
+            value="\n".join(f"**{s}**: {', '.join(ds)}" for s, ds in tbd)[:1024],
+            inline=False)
+    embed.set_footer(text="All times EST • Pentathletes • Rocket Rivals Season 8")
     await interaction.response.send_message(embed=embed)
 
 

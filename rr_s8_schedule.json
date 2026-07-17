@@ -1,0 +1,2481 @@
+{
+ "season": 8,
+ "year": 2026,
+ "source_updated": "2026-07-17",
+ "divisions": {
+  "Challengers": {
+   "teams": {
+    "AR": null,
+    "AZ": "Absolute Zero",
+    "AKO": null,
+    "CV": "Catavale FC",
+    "NDK": null,
+    "RVT": null,
+    "PH": "Penta HiyaHide",
+    "PP": "Pond Pounders",
+    "SC2": null,
+    "SF": "Sublunary Freshman",
+    "TCO": null,
+    "TPA": "Tree Pirates Academy",
+    "TPL": "Tree Pirates Legacy",
+    "VB": null,
+    "VH": null
+   },
+   "stages": [
+    {
+     "stage": "Pre-Season",
+     "dates": [
+      "July 11th/12th",
+      "July 18th/19th"
+     ],
+     "matches": [
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AR",
+        "PH"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "CV",
+        "TCO"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PH",
+        "RVT"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "SF",
+        "TPA"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TPL",
+        "VB"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AZ",
+        "NDK"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PP",
+        "AZ"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "SC2",
+        "NDK"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TCO",
+        "VH"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "VB",
+        "AR"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AKO",
+        "SF"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "RVT",
+        "AKO"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PP",
+        "CV"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TPA",
+        "SC2"
+       ]
+      },
+      {
+       "date": "July 11th/12th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "VH",
+        "TPL"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AR",
+        "AZ"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PH",
+        "SC2"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TPL",
+        "TPA"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "VH",
+        "TPA"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AR",
+        "NDK"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AKO",
+        "CV"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PP",
+        "SF"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TCO",
+        "SF"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TPL",
+        "SC2"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "AKO",
+        "AZ"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "NDK",
+        "RVT"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "VB",
+        "VH"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "TCO",
+        "VB"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "PH",
+        "CV"
+       ]
+      },
+      {
+       "date": "July 18th/19th",
+       "time": "TBD",
+       "day": null,
+       "teams": [
+        "RVT",
+        "PP"
+       ]
+      }
+     ],
+     "scheduled": true
+    },
+    {
+     "stage": "Split 1",
+     "dates": [
+      "July 25th/26th",
+      "August 1st/2nd",
+      "August 8th/9th",
+      "August 15th/16th"
+     ],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Major 1",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Split 2",
+     "dates": [
+      "September 5th/6th",
+      "September 12th/13th",
+      "September 26th/27th",
+      "October 3rd/4th"
+     ],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Major 2",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Group Stage",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Main Event",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    }
+   ]
+  },
+  "Legends": {
+   "teams": {
+    "AKL": "Agni Kai Lynx",
+    "AKT": "Agni Kai Tigris",
+    "STR": "Astronomical",
+    "DNA": "D.N.A",
+    "ESK": "Eastern Shark Kings",
+    "HV": "Havoc Esports",
+    "VND": null,
+    "IV": "Infinite Void",
+    "NCB": "Necro Bloodlust",
+    "NCN": "Necro Nightmare",
+    "PMZ": "Penta Maruzensky",
+    "PS": "Penta Scarlet",
+    "SEN": "Sentinel Esports",
+    "SJV": "Sublunary JV",
+    "TAG": "The Atomic Geese",
+    "SYN": "The Syndicate",
+    "TPB": "Tree Pirates Blue",
+    "TPV": "Tree Pirates Vanguard",
+    "TF": "Twisted Fates",
+    "VR": "Voids Rebellion",
+    "PE": "Phantom Emperors"
+   },
+   "stages": [
+    {
+     "stage": "Pre-Season",
+     "dates": [
+      "July 11th",
+      "July 18th",
+      "July 12th",
+      "July 19th"
+     ],
+     "matches": [
+      {
+       "date": "July 11th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "STR",
+        "TF"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "ESK",
+        "SEN"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "ESK",
+        "NCB"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "AKL",
+        "TAG"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "IV",
+        "AKT"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "IV",
+        "NCN"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "VR",
+        "NCB"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PMZ",
+        "STR"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "TPV",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "SYN",
+        "NCN"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "HV",
+        "AKL"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "TPB",
+        "HV"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "VND",
+        "DNA"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "TPV",
+        "DNA"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "VR",
+        "TF"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "PS",
+        "SJV"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "TPB",
+        "SJV"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "SYN",
+        "TAG"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "VND",
+        "SEN"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PS",
+        "AKT"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "ESK",
+        "DNA"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "VR",
+        "DNA"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "STR",
+        "SEN"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "IV",
+        "SJV"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "SYN",
+        "SJV"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "AKL",
+        "AKT"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "VR",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "STR",
+        "NCB"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "ESK",
+        "TF"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "SYN",
+        "HV"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "AKL",
+        "NCN"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "IV",
+        "TAG"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "TPV",
+        "SEN"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "VND",
+        "TF"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "TPV",
+        "NCB"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "TPB",
+        "AKT"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PS",
+        "TAG"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "TPB",
+        "NCN"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "VND",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PS",
+        "HV"
+       ]
+      }
+     ],
+     "scheduled": true
+    },
+    {
+     "stage": "Split 1",
+     "dates": [
+      "July 25th",
+      "August 1st",
+      "August 8th",
+      "August 15th",
+      "July 26th",
+      "August 2nd",
+      "August 9th",
+      "August 16th"
+     ],
+     "matches": [
+      {
+       "date": "July 25th",
+       "time": "7pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "STR",
+        "ESK"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "TPV",
+        "VND"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VR",
+        "TPV"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "7pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "NCB",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PE",
+        "SEN"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "TF",
+        "PE"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "7pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "AKL",
+        "IV"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "PS",
+        "SYN"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "TPB",
+        "PS"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "7pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "AKT",
+        "HV"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "SJV",
+        "NCN"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "TAG",
+        "SJV"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "ESK",
+        "VR"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VND",
+        "STR"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PMZ",
+        "TF"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "SEN",
+        "NCB"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "IV",
+        "TPB"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "SYN",
+        "AKL"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "HV",
+        "TAG"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "NCN",
+        "AKT"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "7pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VR",
+        "STR"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "ESK",
+        "VND"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VR",
+        "VND"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "7pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "TF",
+        "NCB"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PMZ",
+        "SEN"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "TF",
+        "SEN"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "7pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "TPB",
+        "AKL"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "IV",
+        "SYN"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "TPB",
+        "SYN"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "7pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "TAG",
+        "AKT"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "HV",
+        "NCN"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "TAG",
+        "NCN"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "STR",
+        "TPV"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "ESK",
+        "TPV"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "NCB",
+        "PE"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PMZ",
+        "PE"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "AKL",
+        "PS"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "IV",
+        "PS"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "AKT",
+        "SJV"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "HV",
+        "SJV"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "7pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "TPV",
+        "VR"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VR",
+        "ESK"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VND",
+        "TPV"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "7pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PE",
+        "TF"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "TF",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "SEN",
+        "PE"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "7pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "PS",
+        "TPB"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "TPB",
+        "IV"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "SYN",
+        "PS"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "7pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "SJV",
+        "TAG"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "TAG",
+        "HV"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "NCN",
+        "SJV"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "STR",
+        "VND"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "ESK",
+        "STR"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "NCB",
+        "SEN"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PMZ",
+        "NCB"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "AKL",
+        "SYN"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "IV",
+        "AKL"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "AKT",
+        "NCN"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "HV",
+        "AKT"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "7pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VND",
+        "VR"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "STR",
+        "VR"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "VND",
+        "ESK"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "7pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "SEN",
+        "TF"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "NCB",
+        "TF"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "SEN",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "7pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "SYN",
+        "TPB"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "AKL",
+        "TPB"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "SYN",
+        "IV"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "7pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "NCN",
+        "TAG"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "AKT",
+        "TAG"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "NCN",
+        "HV"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "TPV",
+        "ESK"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday A",
+       "teams": [
+        "TPV",
+        "STR"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PE",
+        "PMZ"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday B",
+       "teams": [
+        "PE",
+        "NCB"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "PS",
+        "IV"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday A",
+       "teams": [
+        "PS",
+        "AKL"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "SJV",
+        "HV"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday B",
+       "teams": [
+        "SJV",
+        "AKT"
+       ]
+      }
+     ],
+     "scheduled": true
+    },
+    {
+     "stage": "Major 1",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Split 2",
+     "dates": [
+      "September 5th",
+      "September 12th",
+      "September 26th",
+      "October 3rd",
+      "September 6th",
+      "September 13th",
+      "September 27th",
+      "October 4th"
+     ],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Major 2",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Swiss Stage",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Main Event",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    }
+   ]
+  },
+  "Titans": {
+   "teams": {
+    "AKG": null,
+    "AKS": null,
+    "ATL": null,
+    "BD": "Black Dragons",
+    "BR": "Bromance Esports",
+    "FA": "Fallen Angels",
+    "HC": null,
+    "NCM": null,
+    "PMK": "Penta Matikane",
+    "PT": "Penta Tachyons",
+    "SOL": null,
+    "SG": "Sublunary Gaming",
+    "SY": null,
+    "JLY": null,
+    "NCR": null,
+    "VE": null
+   },
+   "stages": [
+    {
+     "stage": "Pre-Season",
+     "dates": [
+      "July 11th",
+      "July 18th",
+      "July 12th",
+      "July 19th"
+     ],
+     "matches": [
+      {
+       "date": "July 11th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "AKG",
+        "BD"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "BR",
+        "NCM"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PT",
+        "SOL"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "AKS",
+        "ATL"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "FA",
+        "HC"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PMK",
+        "SG"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "SY",
+        "VE"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PT",
+        "SY"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "NCM",
+        "BD"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "JLY",
+        "NCR"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PMK",
+        "JLY"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "HC",
+        "ATL"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "SOL",
+        "VE"
+       ]
+      },
+      {
+       "date": "July 11th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "BR",
+        "AKG"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "SG",
+        "NCR"
+       ]
+      },
+      {
+       "date": "July 12th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "FA",
+        "AKS"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "AKG",
+        "NCM"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "BR",
+        "VE"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PT",
+        "VE"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "AKS",
+        "HC"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "FA",
+        "NCR"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "PMK",
+        "NCR"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "BD",
+        "SY"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "SOL",
+        "NCM"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "SOL",
+        "BR"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "7pm EST",
+       "day": null,
+       "teams": [
+        "ATL",
+        "JLY"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "SG",
+        "HC"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "SG",
+        "FA"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PT",
+        "BD"
+       ]
+      },
+      {
+       "date": "July 18th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "AKG",
+        "SY"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "8pm EST",
+       "day": null,
+       "teams": [
+        "PMK",
+        "ATL"
+       ]
+      },
+      {
+       "date": "July 19th",
+       "time": "9pm EST",
+       "day": null,
+       "teams": [
+        "AKS",
+        "JLY"
+       ]
+      }
+     ],
+     "scheduled": true
+    },
+    {
+     "stage": "Split 1",
+     "dates": [
+      "July 25th",
+      "August 1st",
+      "August 8th",
+      "August 15th",
+      "July 26th",
+      "August 2nd",
+      "August 9th",
+      "August 16th"
+     ],
+     "matches": [
+      {
+       "date": "July 25th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "BD"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "AKG",
+        "PT"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "NCM"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "ATL"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "AKS",
+        "PMK"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "HC"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SOL",
+        "SY"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SY",
+        "NCM"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "PT",
+        "BR"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "SG",
+        "JLY"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "JLY",
+        "HC"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "PMK",
+        "FA"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "BR"
+       ]
+      },
+      {
+       "date": "July 25th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "AKG",
+        "SOL"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "FA"
+       ]
+      },
+      {
+       "date": "July 26th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "AKS",
+        "SG"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "PT",
+        "NCM"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SY",
+        "BR"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SOL",
+        "BD"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "PMK",
+        "HC"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "JLY",
+        "FA"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "SG",
+        "ATL"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "AKG",
+        "VE"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SOL",
+        "PT"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "SY"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "AKS",
+        "NCR"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "SG",
+        "PMK"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "JLY"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "AKG"
+       ]
+      },
+      {
+       "date": "August 1st",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "NCM",
+        "BR"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "AKS"
+       ]
+      },
+      {
+       "date": "August 2nd",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "HC",
+        "FA"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "PT"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SY",
+        "PT"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "NCM",
+        "SOL"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "PMK"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "JLY",
+        "PMK"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "HC",
+        "SG"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "AKG",
+        "BR"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "NCM"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "BR"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "AKS",
+        "FA"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "HC"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "FA"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "SOL"
+       ]
+      },
+      {
+       "date": "August 8th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SY",
+        "AKG"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "SG"
+       ]
+      },
+      {
+       "date": "August 9th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "JLY",
+        "AKS"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "SOL",
+        "AKG"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "VE"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "VE",
+        "PT"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "SG",
+        "AKS"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "NCR"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "NCR",
+        "PMK"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "7pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BD",
+        "SY"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BR",
+        "PT"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "BR",
+        "SOL"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "7pm EST",
+       "day": "Sunday",
+       "teams": [
+        "ATL",
+        "JLY"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "FA",
+        "PMK"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "FA",
+        "SG"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "8pm EST",
+       "day": "Saturday",
+       "teams": [
+        "NCM",
+        "AKG"
+       ]
+      },
+      {
+       "date": "August 15th",
+       "time": "9pm EST",
+       "day": "Saturday",
+       "teams": [
+        "NCM",
+        "SY"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "8pm EST",
+       "day": "Sunday",
+       "teams": [
+        "HC",
+        "AKS"
+       ]
+      },
+      {
+       "date": "August 16th",
+       "time": "9pm EST",
+       "day": "Sunday",
+       "teams": [
+        "HC",
+        "JLY"
+       ]
+      }
+     ],
+     "scheduled": true
+    },
+    {
+     "stage": "Major 1",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Split 2",
+     "dates": [
+      "September 5th",
+      "September 12th",
+      "September 26th",
+      "October 3rd",
+      "September 6th",
+      "September 13th",
+      "September 27th",
+      "October 4th"
+     ],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "Major 2",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Group Stage",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    },
+    {
+     "stage": "League Championship \u2014 Main Event",
+     "dates": [],
+     "matches": [],
+     "scheduled": false
+    }
+   ]
+  }
+ }
+}
