@@ -32,6 +32,10 @@ SHEET_IDS = {
 }
 EXPORT_URL = "https://docs.google.com/spreadsheets/d/{}/export?format=xlsx"
 STATE_JSON = state_file("rr_s8_schedule.json")
+RESULTS_STATE = state_file("rr_results_state.json")
+DEFAULT_RESULTS_CHANNEL = 1527787044514824373  # #match-results in the Pentathletes server
+DIV_COLORS = {"Challengers": 0x3498DB, "Legends": 0x9B59B6, "Titans": 0xE74C3C}
+DIV_EMOJI = {"Challengers": "🔵", "Legends": "🟣", "Titans": "🔴"}
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(_HERE, "rr_teams.json"), encoding="utf-8") as f:
@@ -332,16 +336,92 @@ def _match_counts(data: dict) -> dict:
             for div, d in data["divisions"].items()}
 
 
+def _all_results(data: dict):
+    """Yields (division, stage, match) for every completed match."""
+    for div, d in data["divisions"].items():
+        for st in d["stages"]:
+            for m in st["matches"]:
+                if m.get("result"):
+                    yield div, st["stage"], m
+
+
+def _result_key(div: str, stage: str, m: dict) -> str:
+    return "|".join([div, stage, m["date"]] + sorted(m["teams"]))
+
+
 # ── cog ──────────────────────────────────────────────────────────────────────
 
 class RRSync(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.last_result = "never run"
+        self.state = self._load_results_state()
         self.sync_loop.start()
 
     def cog_unload(self):
         self.sync_loop.cancel()
+
+    # ── result announcements ─────────────────────────────────────────────────
+
+    def _load_results_state(self) -> dict:
+        try:
+            with open(RESULTS_STATE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            # First run: mark every already-known result as announced so we
+            # don't flood the channel with old scores.
+            state = {"channel_id": DEFAULT_RESULTS_CHANNEL,
+                     "announced": [_result_key(d, s, m) for d, s, m in _all_results(rr_schedule.DATA)]}
+            self._save_results_state(state)
+            return state
+
+    def _save_results_state(self, state: dict | None = None):
+        tmp = RESULTS_STATE + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(state or self.state, f)
+        os.replace(tmp, RESULTS_STATE)
+
+    def _new_results(self) -> dict:
+        """division -> [(stage, match), ...] not announced yet."""
+        announced = set(self.state["announced"])
+        fresh = defaultdict(list)
+        for div, stage, m in _all_results(rr_schedule.DATA):
+            if _result_key(div, stage, m) not in announced:
+                fresh[div].append((stage, m))
+        return fresh
+
+    async def _announce_results(self) -> int:
+        channel_id = self.state.get("channel_id")
+        if not channel_id:
+            return 0
+        fresh = self._new_results()
+        if not fresh:
+            return 0
+        channel = self.bot.get_channel(channel_id)
+        if channel is None:
+            try:
+                channel = await self.bot.fetch_channel(channel_id)
+            except discord.HTTPException:
+                print(f"[rr_sync] results channel {channel_id} not reachable")
+                return 0
+        count = 0
+        for div, entries in fresh.items():
+            embed = discord.Embed(title=f"{DIV_EMOJI.get(div, '')} RRS8 {div.upper()} — MATCH RESULTS",
+                                  color=DIV_COLORS.get(div, 0x5865F2))
+            by_stage = defaultdict(list)
+            for stage, m in entries:
+                by_stage[stage].append(m)
+            for stage, ms in by_stage.items():
+                lines = "\n".join(f"**{rr_schedule.format_result(m)}**  ·  {m['date']}"
+                                  + (" (forfeit)" if m["result"]["ff"] else "") for m in ms)
+                embed.add_field(name=stage, value=lines[:1024], inline=False)
+            embed.set_footer(text="Use /standings and /powerrankings for the bigger picture")
+            await channel.send(embed=embed)
+            for stage, m in entries:
+                self.state["announced"].append(_result_key(div, stage, m))
+            count += len(entries)
+        self._save_results_state()
+        return count
 
     async def sync_once(self) -> str:
         new_data = {"season": 8, "year": rr_schedule.SEASON_YEAR,
@@ -388,6 +468,9 @@ class RRSync(commands.Cog):
             self.last_result = f"updated ({summary})"
         else:
             self.last_result = f"no changes ({', '.join(f'{d}: {n}' for d, n in new_counts.items())})"
+        announced = await self._announce_results()
+        if announced:
+            self.last_result += f" | announced {announced} new result(s)"
         if unknown_all:
             notes = "; ".join(f"{d}: {len(u)} unknown banner(s) {u}" for d, u in unknown_all.items())
             self.last_result += f" | NEW TEAMS NEED MAPPING — {notes}"
@@ -405,6 +488,16 @@ class RRSync(commands.Cog):
     @sync_loop.before_loop
     async def before_sync(self):
         await self.bot.wait_until_ready()
+
+    @app_commands.command(name="setresults",
+                          description="Admin: set (or move) the channel where new RRS8 match results get posted")
+    @app_commands.describe(channel="Channel for result announcements")
+    @app_commands.default_permissions(manage_guild=True)
+    async def setresults(self, interaction: discord.Interaction, channel: discord.TextChannel):
+        self.state["channel_id"] = channel.id
+        self._save_results_state()
+        await interaction.response.send_message(
+            f"New RRS8 match results will be posted in {channel.mention}.", ephemeral=True)
 
     @app_commands.command(name="syncschedule",
                           description="Admin: re-pull the RRS8 schedules from the official sheets now")
