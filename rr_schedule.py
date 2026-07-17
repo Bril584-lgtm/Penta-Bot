@@ -118,6 +118,82 @@ def unscheduled_stages(division: str) -> list:
     return out
 
 
+def standings(division: str, stage: str | None = None) -> list:
+    """Sorted standings rows for one stage, or aggregated across all played
+    stages when stage is None. Rows: {team, pts, w, l, gw, gl, gf, ga}."""
+    blocks = DATA["divisions"][division].get("standings", {})
+    if stage:
+        rows = [dict(r) for r in blocks.get(stage, [])]
+    else:
+        agg: dict[str, dict] = {}
+        for block in blocks.values():
+            for r in block:
+                a = agg.setdefault(r["team"], {"team": r["team"], "pts": 0, "w": 0, "l": 0,
+                                               "gw": 0, "gl": 0, "gf": 0, "ga": 0})
+                for k in ("pts", "w", "l", "gw", "gl", "gf", "ga"):
+                    a[k] += r[k]
+        rows = list(agg.values())
+    rows.sort(key=lambda r: (-r["pts"], -(r["w"] - r["l"]), -(r["gw"] - r["gl"]),
+                             -(r["gf"] - r["ga"])))
+    return rows
+
+
+def standings_stages(division: str) -> list:
+    return list(DATA["divisions"][division].get("standings", {}).keys())
+
+
+def _opponent_records(division: str) -> dict:
+    """team -> list of opponents faced in completed matches."""
+    faced = {}
+    for st in stages(division):
+        for m in st["matches"]:
+            if "result" not in m:
+                continue
+            a, b = m["teams"]
+            faced.setdefault(a, []).append(b)
+            faced.setdefault(b, []).append(a)
+    return faced
+
+
+def power_rankings(division: str) -> list:
+    """Computed rating per team, best first.
+
+    rating = 100*win% + 12*(game diff per match) + 4*(goal +/- per game)
+             + 25*(avg opponent win% — strength of schedule)
+    """
+    rows = standings(division)
+    winpct = {r["team"]: (r["w"] / (r["w"] + r["l"]) if r["w"] + r["l"] else 0.0) for r in rows}
+    faced = _opponent_records(division)
+    ranked = []
+    for r in rows:
+        gp = r["w"] + r["l"]
+        if gp == 0:
+            ranked.append({**r, "rating": 0.0, "sos": 0.0})
+            continue
+        game_diff = (r["gw"] - r["gl"]) / gp
+        games = r["gw"] + r["gl"]
+        goal_pm = (r["gf"] - r["ga"]) / games if games else 0.0
+        opps = faced.get(r["team"], [])
+        sos = sum(winpct.get(o, 0.0) for o in opps) / len(opps) if opps else 0.0
+        rating = 100 * winpct[r["team"]] + 12 * game_diff + 4 * goal_pm + 25 * sos
+        ranked.append({**r, "rating": round(rating, 1), "sos": round(sos, 2)})
+    ranked.sort(key=lambda r: -r["rating"])
+    return ranked
+
+
+def format_result(m: dict) -> str | None:
+    """'AKG 3-1 BD' / 'AKG W-FF BD' for a completed match, else None."""
+    res = m.get("result")
+    if not res:
+        return None
+    a, b = m["teams"]
+    if res["ff"]:
+        wa = res["winner"] == a
+        return f"{a} {'W-FF' if wa else 'FF-W'} {b}"
+    s = res["score"]
+    return f"{a} {s[0]}-{s[1]} {b}"
+
+
 def context_text() -> str:
     """Compact schedule dump appended to the /ask system prompt."""
     lines = ["", "=== ROCKET RIVALS SEASON 8 SCHEDULES (matchups use team abbreviations) ==="]
@@ -130,13 +206,23 @@ def context_text() -> str:
                 for group in matches_by_date(div, st["stage"]):
                     _, dlabel, day, ms = group
                     day_txt = f" ({day})" if day else ""
-                    pairs = "; ".join(f"{m['teams'][0]} vs {m['teams'][1]} @{m['time']}" for m in ms)
+                    pairs = "; ".join(
+                        (f"{format_result(m)} FINAL" if m.get("result")
+                         else f"{m['teams'][0]} vs {m['teams'][1]}") + f" @{m['time']}"
+                        for m in ms)
                     lines.append(f"  {dlabel}{day_txt}: {pairs}")
             elif st["dates"]:
                 lines.append(f"[{st['stage']}] dates: {', '.join(st['dates'])} — matchups TBD")
             else:
                 lines.append(f"[{st['stage']}] dates + matchups TBD")
-    lines.append("\nAll times are EST. Schedule source: official RRS8 division sheets (updated "
-                 + DATA["source_updated"] + "). If asked about results/standings, say you only "
-                 "have the schedule, not live results.")
+        played = standings_stages(div)
+        if played:
+            lines.append(f"[Standings — points/W-L/game diff, stages played: {', '.join(played)}]")
+            for i, r in enumerate(standings(div), 1):
+                lines.append(f"  {i}. {r['team']}: {int(r['pts'])}pts {int(r['w'])}-{int(r['l'])}"
+                             f" games {int(r['gw'])}-{int(r['gl'])} goals {int(r['gf'])}-{int(r['ga'])}")
+    lines.append("\nAll times are EST. Source: official RRS8 division sheets, auto-synced (last: "
+                 + DATA["source_updated"] + "). Matches marked FINAL include the series score "
+                 "(W-FF = forfeit). Standings are the league's official numbers summed across "
+                 "played stages; 2 points per match win.")
     return "\n".join(lines)

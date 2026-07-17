@@ -43,6 +43,18 @@ SECTION = re.compile(r"(?i)^(saturday|sunday)( [ab])?$")
 SCHED_TABS = ["Pre-Season", "Split 1 Schedule", "Major 1", "Split 2 Schedule", "Major 2",
               "League Championship Group Stage", "League Championship Swiss Stage",
               "League Championship Main Event"]
+REPORT_TABS = {"Pre-Season": "Pre-Season Game Reports", "Split 1": "Split 1 Game Reports",
+               "Major 1": "Major 1 Game Reports", "Split 2": "Split 2 Game Reports",
+               "Major 2": "Major 2 Game Reports",
+               "League Championship — Group Stage": "Group Stage Game Reports",
+               "League Championship — Swiss Stage": "Swiss Stage Game Reports",
+               "League Championship — Main Event": "Main Event Game Reports"}
+# Standings Automation block labels -> canonical stage names (S7/Auto blocks skipped)
+STANDINGS_LABEL = {"Preseason": "Pre-Season", "Split 1": "Split 1", "Major 1": "Major 1",
+                   "Split 2": "Split 2", "Major 2": "Major 2",
+                   "Group Stage": "League Championship — Group Stage",
+                   "Swiss Stage": "League Championship — Swiss Stage",
+                   "Main Event": "League Championship — Main Event"}
 STAGE_LABEL = {"Pre-Season": "Pre-Season", "Split 1 Schedule": "Split 1", "Major 1": "Major 1",
                "Split 2 Schedule": "Split 2", "Major 2": "Major 2",
                "League Championship Group Stage": "League Championship — Group Stage",
@@ -90,6 +102,126 @@ def _drawing_anchors(z: zipfile.ZipFile) -> dict:
 def _media_hashes(z: zipfile.ZipFile) -> dict:
     return {n.split("/")[-1]: hashlib.md5(z.read(n)).hexdigest()[:10]
             for n in z.namelist() if n.startswith("xl/media/")}
+
+
+def _decode_result(m1, m2, t1: str, t2: str) -> dict | None:
+    """Two mark-cell values ('W'/'FF'/games-won number) -> result dict or None."""
+    def norm(v):
+        if isinstance(v, (int, float)):
+            return float(v)
+        if isinstance(v, str):
+            s = v.strip().upper()
+            if s in ("W", "FF"):
+                return s
+            try:
+                return float(s)
+            except ValueError:
+                return None
+        return None
+    a, b = norm(m1), norm(m2)
+    if a is None and b is None:
+        return None
+    if isinstance(a, float) and isinstance(b, float):
+        if a == b:
+            return None
+        return {"score": [int(a), int(b)], "winner": t1 if a > b else t2, "ff": False}
+    if a == "W" or b == "FF":
+        return {"score": None, "winner": t1, "ff": True}
+    if b == "W" or a == "FF":
+        return {"score": None, "winner": t2, "ff": True}
+    return None
+
+
+def _parse_reports(wb, anchors: dict, img_hash: dict, division: str) -> dict:
+    """stage -> {(date, frozenset(team pair)): result} from the Game Reports tabs.
+
+    Reports mirror the schedule grid: vertical banner pairs per lane; each
+    team row has a mark cell 4 columns left of the banner ('W', 'FF', or the
+    number of series games won).
+    """
+    hash2team = TEAM_MAP[division]["hash_to_team"]
+    ignore = set(TEAM_MAP.get("ignore_hashes", []))
+    out = {}
+    for stage, tab in REPORT_TABS.items():
+        items = anchors.get(tab, [])
+        if not items or tab not in wb.sheetnames:
+            continue
+        ws = wb[tab]
+        cells, dates = {}, []
+        for row in ws.iter_rows(max_row=250):
+            for c in row:
+                if c.value is None or str(c.value).strip() == "":
+                    continue
+                cells[(c.row, c.column)] = c.value
+                if isinstance(c.value, str) and MONTH.search(c.value):
+                    dates.append((c.row, c.column, c.value.strip()))
+        hdr_rows = sorted({d[0] for d in dates})
+
+        def sec_start(r):
+            prior = [h for h in hdr_rows if h <= r]
+            return prior[-1] if prior else 0
+
+        lanes = defaultdict(list)
+        for it in sorted(items, key=lambda x: (x["row"], x["col"])):
+            h = img_hash.get(it["img"], "")
+            if h in ignore:
+                continue
+            lanes[(sec_start(it["row"]), it["col"])].append((it["row"], hash2team.get(h)))
+        results = {}
+        for (sec, col), slots in lanes.items():
+            sec_dates = [d for d in dates if d[0] == sec] or dates
+            slots = sorted(s for s in slots if s[1] is not None)
+            for i in range(0, len(slots) - 1, 2):
+                (r1, t1), (r2, t2) = slots[i], slots[i + 1]
+                date = min(sec_dates, key=lambda d: abs(d[1] - col))[2] if sec_dates else "?"
+                res = _decode_result(cells.get((r1, col - 4)), cells.get((r2, col - 4)), t1, t2)
+                if res:
+                    res["pair"] = [t1, t2]  # score is in this order
+                    results[(date, frozenset((t1, t2)))] = res
+        if results:
+            out[stage] = results
+    return out
+
+
+def _parse_standings(wb, anchors: dict, img_hash: dict, division: str) -> dict:
+    """canonical stage -> [{team, pts, w, l, gw, gl, gf, ga}] from Standings Automation."""
+    hash2team = TEAM_MAP[division]["hash_to_team"]
+    if "Standings Automation" not in wb.sheetnames:
+        return {}
+    ws = wb["Standings Automation"]
+    cells, headers = {}, []
+    for row in ws.iter_rows(max_row=300):
+        for c in row:
+            if c.value is None or str(c.value).strip() == "":
+                continue
+            cells[(c.row, c.column)] = c.value
+            if c.column == 1 and isinstance(c.value, str):
+                headers.append((c.row, c.value.strip()))
+    team_rows = {it["row"]: it["img"] for it in anchors.get("Standings Automation", [])
+                 if it["col"] == 2}
+    out = {}
+    for i, (hrow, label) in enumerate(headers):
+        stage = STANDINGS_LABEL.get(label)
+        if stage is None:  # skips "* Auto" duplicates and prior-season blocks
+            continue
+        end = headers[i + 1][0] if i + 1 < len(headers) else hrow + 30
+        rows = []
+        for r in range(hrow + 1, end):
+            img = team_rows.get(r)
+            if not img:
+                continue
+            team = hash2team.get(img_hash.get(img, ""))
+            if not team:
+                continue
+
+            def num(col):
+                v = cells.get((r, col), 0)
+                return float(v) if isinstance(v, (int, float)) else 0.0
+            rows.append({"team": team, "pts": num(3), "w": num(4), "l": num(5),
+                         "gw": num(7), "gl": num(8), "gf": num(10), "ga": num(11)})
+        if rows and any(row["w"] or row["l"] for row in rows):
+            out[stage] = rows
+    return out
 
 
 def parse_workbook(xlsx_bytes: bytes, division: str) -> tuple[dict, list]:
@@ -157,8 +289,42 @@ def parse_workbook(xlsx_bytes: bytes, division: str) -> tuple[dict, list]:
         stages.append({"stage": STAGE_LABEL[tab],
                        "dates": list(dict.fromkeys(d[2] for d in dates)),
                        "matches": matches, "scheduled": bool(matches)})
+    reports = _parse_reports(wb, anchors, img_hash, division)
+    standings = _parse_standings(wb, anchors, img_hash, division)
+
+    def attach(m, res):
+        score = res["score"]
+        if score and res["pair"] != m["teams"]:
+            score = score[::-1]
+        m["result"] = {"score": score, "winner": res["winner"], "ff": res["ff"]}
+
+    def date_key(label):
+        m = re.match(r"(\w+) (\d+)", label or "")
+        months = ["January", "February", "March", "April", "May", "June", "July",
+                  "August", "September", "October", "November", "December"]
+        return (months.index(m.group(1)), int(m.group(2))) if m and m.group(1) in months else (99, 99)
+
+    for st in stages:
+        stage_results = dict(reports.get(st["stage"], {}))
+        # pass 1: exact scheduled date + team pair
+        for m in st["matches"]:
+            res = stage_results.pop((m["date"], frozenset(m["teams"])), None)
+            if res:
+                attach(m, res)
+        # pass 2: makeup games are reported under the date actually played, so
+        # match leftover results to unresolved meetings of the same pair in
+        # chronological order
+        leftovers = defaultdict(list)
+        for (rdate, pair), res in sorted(stage_results.items(), key=lambda kv: date_key(kv[0][0])):
+            leftovers[pair].append(res)
+        for m in sorted((m for m in st["matches"] if "result" not in m),
+                        key=lambda m: date_key(m["date"])):
+            q = leftovers.get(frozenset(m["teams"]))
+            if q:
+                attach(m, q.pop(0))
     wb.close()
-    return {"teams": TEAM_MAP[division]["names"], "stages": stages}, sorted(unknown)
+    return {"teams": TEAM_MAP[division]["names"], "stages": stages,
+            "standings": standings}, sorted(unknown)
 
 
 def _match_counts(data: dict) -> dict:
@@ -209,8 +375,8 @@ class RRSync(commands.Cog):
                 print(f"[rr_sync] {self.last_result}")
                 return self.last_result
 
-        old_matches = {d: v["stages"] for d, v in rr_schedule.DATA["divisions"].items()}
-        new_matches = {d: v["stages"] for d, v in new_data["divisions"].items()}
+        old_matches = {d: (v["stages"], v.get("standings")) for d, v in rr_schedule.DATA["divisions"].items()}
+        new_matches = {d: (v["stages"], v.get("standings")) for d, v in new_data["divisions"].items()}
         changed = old_matches != new_matches
         if changed:
             tmp = STATE_JSON + ".tmp"

@@ -384,6 +384,74 @@ async def servers(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
+# ── /standings + /powerrankings ───────────────────────────────────────────────
+
+def _standings_lines(rows: list) -> list:
+    lines = []
+    for i, r in enumerate(rows, 1):
+        diff = int(r["gw"] - r["gl"])
+        pm = int(r["gf"] - r["ga"])
+        lines.append(f"`{i:>2}.` **{r['team']}** — {int(r['pts'])} pts • {int(r['w'])}-{int(r['l'])}"
+                     f" • games {diff:+d} • goals {pm:+d}")
+    return lines
+
+
+@bot.tree.command(name="standings", description="RRS8 team standings — official league numbers")
+@app_commands.describe(division="Which division", stage="Optional: a single stage (default: season so far)")
+@app_commands.choices(
+    division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS],
+    stage=[app_commands.Choice(name=s, value=s) for s in
+           ["Pre-Season", "Split 1", "Major 1", "Split 2", "Major 2"]],
+)
+async def standings_cmd(interaction: discord.Interaction, division: app_commands.Choice[str],
+                        stage: app_commands.Choice[str] = None):
+    div = division.value
+    stage_name = stage.value if stage else None
+    if stage_name and stage_name not in rr_schedule.standings_stages(div):
+        await interaction.response.send_message(
+            f"No results for **{stage_name}** in {div} yet. Stages with results: "
+            f"{', '.join(rr_schedule.standings_stages(div)) or 'none'}", ephemeral=True)
+        return
+    rows = rr_schedule.standings(div, stage_name)
+    if not rows:
+        await interaction.response.send_message(f"No results reported in {div} yet.", ephemeral=True)
+        return
+    scope = stage_name or f"Season so far ({', '.join(rr_schedule.standings_stages(div))})"
+    embed = discord.Embed(title=f"{DIV_EMOJI[div]} RRS8 {div.upper()} — STANDINGS",
+                          description=f"**{scope}**", color=DIV_COLORS[div])
+    lines = _standings_lines(rows)
+    for i in range(0, len(lines), 10):
+        embed.add_field(name="​" if i else "Rank — Pts • W-L • Game diff • Goal +/-",
+                        value="\n".join(lines[i:i + 10]), inline=False)
+    embed.set_footer(text="Official league numbers • 2 pts per match win • Pentathletes")
+    await interaction.response.send_message(embed=embed)
+
+
+@bot.tree.command(name="powerrankings", description="RRS8 power rankings — computed from results, not just points")
+@app_commands.describe(division="Which division")
+@app_commands.choices(division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS])
+async def powerrankings(interaction: discord.Interaction, division: app_commands.Choice[str]):
+    div = division.value
+    ranked = rr_schedule.power_rankings(div)
+    if not any(r["rating"] for r in ranked):
+        await interaction.response.send_message(f"No results reported in {div} yet.", ephemeral=True)
+        return
+    embed = discord.Embed(
+        title=f"{DIV_EMOJI[div]} RRS8 {div.upper()} — POWER RANKINGS",
+        description="Rating blends win %, game differential, goal differential, "
+                    "and strength of schedule — so who you beat matters, not just how often.",
+        color=DIV_COLORS[div])
+    lines = []
+    for i, r in enumerate(ranked, 1):
+        lines.append(f"`{i:>2}.` **{r['team']}** — {r['rating']:.1f} "
+                     f"({int(r['w'])}-{int(r['l'])}, SoS {r['sos']:.2f})")
+    for i in range(0, len(lines), 10):
+        embed.add_field(name="​" if i else "Rating (record, strength of schedule)",
+                        value="\n".join(lines[i:i + 10]), inline=False)
+    embed.set_footer(text="rating = 100·win% + 12·game diff/match + 4·goal ±/game + 25·SoS")
+    await interaction.response.send_message(embed=embed)
+
+
 # ── /schedule ─────────────────────────────────────────────────────────────────
 
 DIV_COLORS = {"Challengers": 0x3498DB, "Legends": 0x9B59B6, "Titans": 0xE74C3C}
@@ -393,7 +461,10 @@ DIV_EMOJI = {"Challengers": "🔵", "Legends": "🟣", "Titans": "🔴"}
 def _schedule_embed_fields(embed: discord.Embed, groups: list, division: str, limit: int = 12):
     for stage, dlabel, day, ms in groups[:limit]:
         day_txt = f" — {day}" if day else ""
-        lines = "\n".join(f"`{m['time']:>8}` {m['teams'][0]} vs {m['teams'][1]}" for m in ms)
+        lines = "\n".join(
+            f"`{m['time']:>8}` " + (f"**{rr_schedule.format_result(m)}**" if m.get("result")
+                                    else f"{m['teams'][0]} vs {m['teams'][1]}")
+            for m in ms)
         embed.add_field(name=f"{dlabel}{day_txt} ({stage})", value=lines[:1024], inline=False)
     if len(groups) > limit:
         embed.add_field(name="…", value=f"+{len(groups) - limit} more match days — filter by team or stage to narrow it down.", inline=False)
