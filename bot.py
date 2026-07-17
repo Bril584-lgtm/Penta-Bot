@@ -120,8 +120,6 @@ Titans: https://discord.gg/SNJhsp8jXZ
 8. You're eligible once signed + verified + 400 games met
 """
 
-RR_CONTEXT += rr_schedule.context_text()
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True  # required for on_member_remove (farewell messages)
@@ -170,7 +168,7 @@ def _query_claude_sync(question: str):
             model="claude-sonnet-5",
             max_tokens=2048,
             thinking={"type": "disabled"},  # keep replies fast; Sonnet 5 defaults to adaptive thinking when omitted
-            system=RR_CONTEXT,
+            system=RR_CONTEXT + rr_schedule.context_text(),  # schedule text rebuilt each call so syncs show up
             tools=WEB_TOOLS,
             messages=messages,
         )
@@ -464,6 +462,7 @@ async def main():
         await bot.load_extension("farewell")
         await bot.load_extension("vc")
         await bot.load_extension("moderation")
+        await bot.load_extension("rr_sync")
         await bot.start(DISCORD_TOKEN)
 
 

@@ -1,20 +1,44 @@
 """Rocket Rivals Season 8 schedule data + helpers.
 
-Data lives in rr_s8_schedule.json (parsed from the official RRS8 division
-sheets on 2026-07-17). Matchups use team abbreviations as shown on the
-league banners; full names are included where the league publishes them.
+Data lives in rr_s8_schedule.json. The repo copy is the baseline parsed from
+the official RRS8 division sheets on 2026-07-17; the rr_sync cog refreshes a
+copy in STATE_DIR from the live sheets and hot-reloads this module. Matchups
+use team abbreviations as shown on the league banners; full names are
+included where the league publishes them.
 """
 import json
 import os
 import re
 from datetime import date, datetime
 
-_HERE = os.path.dirname(os.path.abspath(__file__))
-with open(os.path.join(_HERE, "rr_s8_schedule.json"), encoding="utf-8") as f:
-    DATA = json.load(f)
+from statepath import state_file
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_REPO_JSON = os.path.join(_HERE, "rr_s8_schedule.json")
+_STATE_JSON = state_file("rr_s8_schedule.json")
+
+
+def _load() -> dict:
+    for path in (_STATE_JSON, _REPO_JSON):
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            if data.get("divisions"):
+                return data
+        except (OSError, ValueError):
+            continue
+    raise RuntimeError("no usable rr_s8_schedule.json found")
+
+
+DATA = _load()
 SEASON_YEAR = DATA["year"]
 DIVISIONS = list(DATA["divisions"].keys())  # Challengers, Legends, Titans
+
+
+def reload() -> None:
+    """Re-read the schedule JSON (called by rr_sync after a successful sync)."""
+    global DATA
+    DATA = _load()
 
 _MONTHS = {m: i + 1 for i, m in enumerate(
     ["January", "February", "March", "April", "May", "June", "July",

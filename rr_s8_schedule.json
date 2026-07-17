@@ -387,7 +387,7 @@
       {
        "date": "July 11th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "STR",
         "TF"
@@ -396,7 +396,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "ESK",
         "SEN"
@@ -405,7 +405,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "ESK",
         "NCB"
@@ -414,7 +414,7 @@
       {
        "date": "July 12th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKL",
         "TAG"
@@ -423,7 +423,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "IV",
         "AKT"
@@ -432,7 +432,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "IV",
         "NCN"
@@ -441,7 +441,7 @@
       {
        "date": "July 11th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VR",
         "NCB"
@@ -450,7 +450,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "PMZ",
         "STR"
@@ -459,7 +459,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "TPV",
         "PMZ"
@@ -468,7 +468,7 @@
       {
        "date": "July 12th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SYN",
         "NCN"
@@ -477,7 +477,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "HV",
         "AKL"
@@ -486,7 +486,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "TPB",
         "HV"
@@ -495,7 +495,7 @@
       {
        "date": "July 11th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VND",
         "DNA"
@@ -504,7 +504,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "TPV",
         "DNA"
@@ -513,7 +513,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VR",
         "TF"
@@ -522,7 +522,7 @@
       {
        "date": "July 12th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PS",
         "SJV"
@@ -531,7 +531,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "TPB",
         "SJV"
@@ -540,7 +540,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SYN",
         "TAG"
@@ -549,7 +549,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VND",
         "SEN"
@@ -558,7 +558,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PS",
         "AKT"
@@ -567,7 +567,7 @@
       {
        "date": "July 18th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "ESK",
         "DNA"
@@ -576,7 +576,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VR",
         "DNA"
@@ -585,7 +585,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "STR",
         "SEN"
@@ -594,7 +594,7 @@
       {
        "date": "July 19th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "IV",
         "SJV"
@@ -603,7 +603,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SYN",
         "SJV"
@@ -612,7 +612,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKL",
         "AKT"
@@ -621,7 +621,7 @@
       {
        "date": "July 18th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VR",
         "PMZ"
@@ -630,7 +630,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "STR",
         "NCB"
@@ -639,7 +639,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "ESK",
         "TF"
@@ -648,7 +648,7 @@
       {
        "date": "July 19th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SYN",
         "HV"
@@ -657,7 +657,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKL",
         "NCN"
@@ -666,7 +666,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "IV",
         "TAG"
@@ -675,7 +675,7 @@
       {
        "date": "July 18th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "TPV",
         "SEN"
@@ -684,7 +684,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VND",
         "TF"
@@ -693,7 +693,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "TPV",
         "NCB"
@@ -702,7 +702,7 @@
       {
        "date": "July 19th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "TPB",
         "AKT"
@@ -711,7 +711,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PS",
         "TAG"
@@ -720,7 +720,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "TPB",
         "NCN"
@@ -729,7 +729,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "VND",
         "PMZ"
@@ -738,7 +738,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PS",
         "HV"
@@ -1556,7 +1556,7 @@
       {
        "date": "July 11th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "AKG",
         "BD"
@@ -1565,7 +1565,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "BR",
         "NCM"
@@ -1574,7 +1574,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "PT",
         "SOL"
@@ -1583,7 +1583,7 @@
       {
        "date": "July 12th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKS",
         "ATL"
@@ -1592,7 +1592,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "FA",
         "HC"
@@ -1601,7 +1601,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PMK",
         "SG"
@@ -1610,7 +1610,7 @@
       {
        "date": "July 11th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "SY",
         "VE"
@@ -1619,7 +1619,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "PT",
         "SY"
@@ -1628,7 +1628,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "NCM",
         "BD"
@@ -1637,7 +1637,7 @@
       {
        "date": "July 12th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "JLY",
         "NCR"
@@ -1646,7 +1646,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PMK",
         "JLY"
@@ -1655,7 +1655,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "HC",
         "ATL"
@@ -1664,7 +1664,7 @@
       {
        "date": "July 11th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "SOL",
         "VE"
@@ -1673,7 +1673,7 @@
       {
        "date": "July 11th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "BR",
         "AKG"
@@ -1682,7 +1682,7 @@
       {
        "date": "July 12th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SG",
         "NCR"
@@ -1691,7 +1691,7 @@
       {
        "date": "July 12th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "FA",
         "AKS"
@@ -1700,7 +1700,7 @@
       {
        "date": "July 18th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "AKG",
         "NCM"
@@ -1709,7 +1709,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "BR",
         "VE"
@@ -1718,7 +1718,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "PT",
         "VE"
@@ -1727,7 +1727,7 @@
       {
        "date": "July 19th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKS",
         "HC"
@@ -1736,7 +1736,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "FA",
         "NCR"
@@ -1745,7 +1745,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PMK",
         "NCR"
@@ -1754,7 +1754,7 @@
       {
        "date": "July 18th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "BD",
         "SY"
@@ -1763,7 +1763,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "SOL",
         "NCM"
@@ -1772,7 +1772,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "SOL",
         "BR"
@@ -1781,7 +1781,7 @@
       {
        "date": "July 19th",
        "time": "7pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "ATL",
         "JLY"
@@ -1790,7 +1790,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SG",
         "HC"
@@ -1799,7 +1799,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "SG",
         "FA"
@@ -1808,7 +1808,7 @@
       {
        "date": "July 18th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "PT",
         "BD"
@@ -1817,7 +1817,7 @@
       {
        "date": "July 18th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Saturday",
        "teams": [
         "AKG",
         "SY"
@@ -1826,7 +1826,7 @@
       {
        "date": "July 19th",
        "time": "8pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "PMK",
         "ATL"
@@ -1835,7 +1835,7 @@
       {
        "date": "July 19th",
        "time": "9pm EST",
-       "day": null,
+       "day": "Sunday",
        "teams": [
         "AKS",
         "JLY"
