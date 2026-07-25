@@ -1,11 +1,12 @@
-"""Temp voice channels — join-to-create hub with owner controls.
+"""Temp voice channels — join-to-create hubs with owner controls.
 
-Admin runs /setupvc once: creates a "➕ Create VC" hub channel. Anyone who
-joins the hub gets their own VC spawned and is moved into it as owner.
-Owners manage their VC with /vc claim, kick, limit, lock, mute, rename,
-unlock, unmute (registered alphabetically so they list in ABC order).
-Empty temp VCs are deleted automatically, including leftovers swept on
-startup after a redeploy.
+Admin runs /setupvc to create a "➕ Create VC" hub channel; it can be run
+again (with a different name/category) to add more hubs — a guild isn't
+limited to one. Anyone who joins a hub gets their own VC spawned and is
+moved into it as owner. Owners manage their VC with /vc claim, kick, limit,
+lock, mute, rename, unlock, unmute (registered alphabetically so they list
+in ABC order). Empty temp VCs are deleted automatically, including
+leftovers swept on startup after a redeploy.
 
 Bot needs: Manage Channels + Move Members (server-wide or on the category).
 """
@@ -42,6 +43,12 @@ class TempVC(commands.Cog):
                 state["temp"] = loaded.get("temp", {})
             except (json.JSONDecodeError, OSError) as e:
                 print(f"[vc] Could not read state file, starting fresh: {e}")
+        for gid, cfg in state["guilds"].items():
+            if "hub_id" in cfg and "hubs" not in cfg:
+                # migrate pre-multi-hub format (single hub_id/category_id per guild)
+                state["guilds"][gid] = {
+                    "hubs": {str(cfg["hub_id"]): {"category_id": cfg.get("category_id", 0)}}
+                }
         return state
 
     def _save_state(self):
@@ -50,6 +57,11 @@ class TempVC(commands.Cog):
 
     def _guild_cfg(self, guild_id: int) -> dict | None:
         return self.state["guilds"].get(str(guild_id))
+
+    def _hubs(self, guild_id: int) -> dict:
+        """hub_id (str) -> {"category_id": int} for this guild."""
+        cfg = self._guild_cfg(guild_id)
+        return cfg.get("hubs", {}) if cfg else {}
 
     # ── lifecycle ────────────────────────────────────────────────────────────
 
@@ -60,18 +72,22 @@ class TempVC(commands.Cog):
             guild = self.bot.get_guild(int(gid))
             if not guild:
                 continue
-            category = guild.get_channel(cfg.get("category_id", 0))
-            if not category:
-                continue
-            for ch in category.voice_channels:
-                if ch.id == cfg.get("hub_id"):
+            hubs = cfg.get("hubs", {})
+            hub_ids = {int(hid) for hid in hubs}
+            category_ids = {info.get("category_id", 0) for info in hubs.values()}
+            for cat_id in category_ids:
+                category = guild.get_channel(cat_id)
+                if not category:
                     continue
-                if not ch.members:
-                    try:
-                        await ch.delete(reason="Temp VC cleanup (empty after restart)")
-                    except discord.HTTPException as e:
-                        print(f"[vc] cleanup failed for #{ch.name}: {e}")
-                    self.state["temp"].pop(str(ch.id), None)
+                for ch in category.voice_channels:
+                    if ch.id in hub_ids:
+                        continue
+                    if not ch.members:
+                        try:
+                            await ch.delete(reason="Temp VC cleanup (empty after restart)")
+                        except discord.HTTPException as e:
+                            print(f"[vc] cleanup failed for #{ch.name}: {e}")
+                        self.state["temp"].pop(str(ch.id), None)
         self._save_state()
 
     @commands.Cog.listener()
@@ -80,9 +96,8 @@ class TempVC(commands.Cog):
                                     after: discord.VoiceState):
         if member.bot:
             return
-        cfg = self._guild_cfg(member.guild.id)
-        # joined the hub → spawn a personal VC
-        if cfg and after.channel and after.channel.id == cfg.get("hub_id"):
+        # joined a hub → spawn a personal VC
+        if after.channel and str(after.channel.id) in self._hubs(member.guild.id):
             await self._spawn(member, after.channel)
         # left a temp VC that is now empty → delete it
         if (before.channel
@@ -143,45 +158,71 @@ class TempVC(commands.Cog):
 
     # ── /setupvc ─────────────────────────────────────────────────────────────
 
-    @app_commands.command(name="setupvc", description="Create the join-to-create VC hub for this server")
-    @app_commands.describe(category="Category to put temp VCs in (default: creates one)")
+    @app_commands.command(name="setupvc", description="Create a join-to-create VC hub for this server (can be run more than once for multiple hubs)")
+    @app_commands.describe(category="Category to put temp VCs in (default: creates one)",
+                           name="Name for this hub channel (default: \"➕ Create VC\")")
     @app_commands.default_permissions(manage_guild=True)
     async def setup_vc(self, interaction: discord.Interaction,
-                       category: discord.CategoryChannel | None = None):
+                       category: discord.CategoryChannel | None = None,
+                       name: str | None = None):
         await interaction.response.defer()
         guild = interaction.guild
+        hub_name = (name or HUB_NAME)[:100]
         try:
             if category is None:
                 category = await guild.create_category(DEFAULT_CATEGORY, reason="Temp VC system")
-            hub = await guild.create_voice_channel(HUB_NAME, category=category,
+            hub = await guild.create_voice_channel(hub_name, category=category,
                                                    reason="Temp VC hub")
         except discord.HTTPException as e:
             await interaction.followup.send(
                 f"❌ Couldn't create channels — make sure I have **Manage Channels**: {e}")
             return
-        self.state["guilds"][str(guild.id)] = {"hub_id": hub.id, "category_id": category.id}
+        cfg = self.state["guilds"].setdefault(str(guild.id), {"hubs": {}})
+        cfg["hubs"][str(hub.id)] = {"category_id": category.id}
         self._save_state()
+        total = len(cfg["hubs"])
         await interaction.followup.send(
             f"✅ Temp VC hub ready: join {hub.mention} and you'll get your own channel.\n"
-            f"Owners control theirs with `/vc lock`, `/vc kick`, `/vc limit`, `/vc rename`, and more."
+            f"Owners control theirs with `/vc lock`, `/vc kick`, `/vc limit`, `/vc rename`, and more.\n"
+            + (f"This server now has **{total} hubs** set up." if total > 1 else "")
         )
 
-    @app_commands.command(name="removevc", description="Disable the join-to-create VC system")
+    @app_commands.command(name="removevc", description="Disable a join-to-create VC hub (or all, if only one exists)")
+    @app_commands.describe(hub="Which hub to remove (only needed if you have more than one)")
     @app_commands.default_permissions(manage_guild=True)
-    async def remove_vc(self, interaction: discord.Interaction):
-        cfg = self.state["guilds"].pop(str(interaction.guild_id), None)
-        self._save_state()
-        if not cfg:
+    async def remove_vc(self, interaction: discord.Interaction,
+                        hub: discord.VoiceChannel | None = None):
+        hubs = self._hubs(interaction.guild_id)
+        if not hubs:
             await interaction.response.send_message("Temp VCs weren't set up.")
             return
-        hub = interaction.guild.get_channel(cfg.get("hub_id", 0))
-        if hub:
+        if hub is None:
+            if len(hubs) > 1:
+                mentions = ", ".join(f"<#{hid}>" for hid in hubs)
+                await interaction.response.send_message(
+                    f"This server has multiple hubs ({mentions}) — specify which one with the `hub` option.",
+                    ephemeral=True)
+                return
+            target_id = next(iter(hubs))
+        else:
+            target_id = str(hub.id)
+            if target_id not in hubs:
+                await interaction.response.send_message(
+                    f"{hub.mention} isn't a temp VC hub.", ephemeral=True)
+                return
+        del hubs[target_id]
+        if not hubs:
+            self.state["guilds"].pop(str(interaction.guild_id), None)
+        self._save_state()
+        hub_channel = interaction.guild.get_channel(int(target_id))
+        if hub_channel:
             try:
-                await hub.delete(reason="Temp VC system disabled")
+                await hub_channel.delete(reason="Temp VC hub disabled")
             except discord.HTTPException:
                 pass
+        remaining = f" {len(hubs)} hub(s) still active." if hubs else ""
         await interaction.response.send_message(
-            "🛑 Temp VC system disabled. Existing temp channels will still auto-delete when empty.")
+            f"🛑 Hub disabled.{remaining} Existing temp channels will still auto-delete when empty.")
 
     # ── /vc group (subcommands registered in ABC order) ─────────────────────
 
