@@ -118,6 +118,38 @@ Titans: https://discord.gg/SNJhsp8jXZ
 6. Post in #free-agency to find a team
 7. Once signed by a team, get verified by the bot
 8. You're eligible once signed + verified + 400 games met
+
+=== RIVALRY LEAGUE — SUMMER CIRCUIT 2026 (therivalry.gg) ===
+This is a SEPARATE circuit from Rocket Rivals above — do not mix rules between the two. If a member's question could be about either, ask which league they mean before answering.
+
+KEY DATES: Registration deadline July 13, 2026. League Play window July 20–Aug 23, 2026. Playoffs window Aug 24–Sep 21, 2026. Roster changes must have a ticket opened before Aug 17, 2026 (playoff bracket generation) — rosters lock for all of playoffs after that.
+
+FORMAT: Modified Swiss, 1 match/week for 5 weeks, regular season = Best-of-5. Odd team count in a tier = lowest-ranked team gets a bye win (1-0, max game differential). Top 16 per Rank Tier advance to playoffs: 16-team single-elim bracket, 4 weeks, Best-of-7. Split tiers (e.g. 3a/3b) get an extra grand-final week.
+
+SCHEDULING: Default play window Mon–Sun 7–11 PM local regional time (US-East ET, Europe CEST, Sub-Saharan Africa SAST). Custom times allowed only if (1) played within the same calendar week it was generated, and (2) both captains agree. Match threads auto-created every Monday ~12 PM local circuit time — ALL scheduling must happen in-thread; DMs/other platforms are not recognized in disputes. Unresponsive opponent: ping staff in-thread by Wednesday evening → staff gives 24hr formal notice → forfeit if still unresponsive.
+
+RESULTS REPORTING: Due the following Monday 12 PM local circuit time, submitted on therivalry.gg match page. Miss the deadline = automatic Double Forfeit for BOTH teams, no exceptions. Either captain can submit but both teams are equally responsible.
+
+PLAYOFF SEEDING TIEBREAKERS (in order): 1) match win-loss record, 2) fewest forfeits issued, 3) fewest forfeit wins received, 4) fewest byes received, 5) game win %, 6) total in-game wins, 7) goal differential, 8) fewest goals allowed, 9) most goals scored. Still tied → staff review or tiebreaker match.
+
+ACCOUNTS & ROSTERS: Must bind Epic/Steam/Xbox/PSN to therivalry.gg profile before playing — playing unbound = automatic forfeit. One roster per circuit per player (can play same mode in different regions if time/server allows). Must be in RIVALRY Discord before roster approval. Must have an assigned Rank Tier to play — fielding an unassigned/ineligible player = forfeit + team suspension pending investigation. Must self-report any historical peak MMR higher than current tracker shows BEFORE season start, or face disqualification + permanent ban.
+
+RANK TIERS (static for this season): Tier 1 ≥1800, Tier 2 1650–1799, Tier 3 1500–1649, Tier 4 1350–1499, Tier 5 1200–1349, Tier 6 1050–1199, Tier 7 ≤1049.
+
+3v3 CIRCUIT: roster 3–5 players. Rank = 75% of 3s peak MMR + 25% of 2s peak MMR (max 120-pt gap between the two peaks used). Team tier = highest-ranked player on roster.
+2v2 CIRCUIT: roster 2–3 players. Rank = 25% of 3s peak MMR + 75% of 2s peak MMR (same 120-pt cap). Team tier = highest-ranked player on roster.
+
+MID-SEASON ROSTER CHANGES: Adding — new player's rank must fit the team's tier ceiling; captain submits invite on therivalry.gg, then opens a Roster Change Request ticket in #create-a-ticket with team link + circuit; player is NOT cleared until staff posts formal approval. Removing — open a Roster Change Request ticket; once a player has played even one official game, they're PERMANENTLY locked to that roster for the season.
+
+INTEGRITY: One validated account only — no alts/smurfing/boosting/account sharing. Sandbagging (throwing/inflating/deflating rank) is banned. Two forfeits in a season = automatic disqualification. Match-fixing/collusion/soft-play = Level 4/5 penalty. Zero tolerance for harassment/hate speech/threats — applies across broadcasts, chat, quick-chat, socials, and match threads.
+
+MATCH SETUP: Private Match only, Cross-Platform Play ON, joinable by Name/Password. No spectators unless both captains explicitly agree in-thread. Default map Champion's Field (Standard RLCS map list available if both captains agree — full list includes DFH Stadium, Mannfield, Urban Central, Beckwith Park, Utopia Coliseum, Wasteland Standard, Neo Tokyo Standard, AquaDome, Starbase ARC Standard, Salty Shores, Forbidden Temple, Neon Fields, Deadeye Canyon, Sovereign Heights, Estádio Vida). No bots, no mutators, do NOT use the Series Mutator. Match Admin setting must be DISABLED — using it while enabled = automatic forfeit for the hosting team (opponent must screenshot/clip + ticket to claim).
+
+LAUNCH/PUNCTUALITY: Don't pick a side until the minimum required players are in lobby. Home team (Orange) selects side first once everyone's in (streamed matches: Orange waits for production cue). 10-minute grace period from scheduled start — after that the present team can claim forfeit via ticket + evidence, though staff encourages rescheduling if both sides show flexibility.
+
+DISCONNECTS: Pregame crash before countdown ends = remake the game. Mid-game disconnect = play continues, player may rejoin, NO substitutions allowed mid-game. 5-minute technical timeout between games to fix issues — exceeding it without an opponent-granted extension = forfeit that game/match. Full server crash = score wiped, game replayed.
+
+PENALTY LEVELS: L1 Official Warning (minor toxicity/admin non-compliance, logged only). L2 Discord/platform mute (repeated L1, severe toxicity, gameplay delays). L3 Individual player suspension, min 1 match week, team must sub. L4 Automatic team forfeit (first no-show, match-throwing, roster manipulation) — counts as the team's first admin-issued forfeit. L5 Circuit expulsion + blacklisting (2 forfeits total, cheating, hacking, match-fixing) — roster dismantled, remaining matches marked losses, awards forfeited.
 """
 
 intents = discord.Intents.default()
