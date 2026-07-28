@@ -33,6 +33,7 @@ SHEET_IDS = {
 EXPORT_URL = "https://docs.google.com/spreadsheets/d/{}/export?format=xlsx"
 STATE_JSON = state_file("rr_s8_schedule.json")
 RESULTS_STATE = state_file("rr_results_state.json")
+PENTA_RESULTS_STATE = state_file("rr_penta_results_state.json")
 DEFAULT_RESULTS_CHANNEL = 1527787044514824373  # #match-results in the Pentathletes server
 DIV_COLORS = {"Challengers": 0x3498DB, "Legends": 0x9B59B6, "Titans": 0xE74C3C}
 DIV_EMOJI = {"Challengers": "🔵", "Legends": "🟣", "Titans": "🔴"}
@@ -40,6 +41,15 @@ DIV_EMOJI = {"Challengers": "🔵", "Legends": "🟣", "Titans": "🔴"}
 _HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(_HERE, "rr_teams.json"), encoding="utf-8") as f:
     TEAM_MAP = json.load(f)  # division -> {hash_to_team, names}
+
+# Any team abbreviation whose display name starts with "Penta " — stays in
+# sync with rr_teams.json automatically if a new Penta roster is added.
+PENTA_TEAMS = {abbr for div in TEAM_MAP.values() if isinstance(div, dict) and div.get("names")
+               for abbr, name in div["names"].items() if name and name.startswith("Penta ")}
+
+
+def _is_penta_match(m: dict) -> bool:
+    return bool(PENTA_TEAMS & set(m["teams"]))
 
 MONTH = re.compile(r"(January|February|March|April|May|June|July|August|September|October|November|December)", re.I)
 TIME = re.compile(r"\d\s*(pm|am)", re.I)
@@ -356,6 +366,7 @@ class RRSync(commands.Cog):
         self.bot = bot
         self.last_result = "never run"
         self.state = self._load_results_state()
+        self.penta_state = self._load_penta_results_state()
         self.sync_loop.start()
 
     def cog_unload(self):
@@ -386,6 +397,37 @@ class RRSync(commands.Cog):
         announced = set(self.state["announced"])
         fresh = defaultdict(list)
         for div, stage, m in _all_results(rr_schedule.DATA):
+            if _result_key(div, stage, m) not in announced:
+                fresh[div].append((stage, m))
+        return fresh
+
+    def _load_penta_results_state(self) -> dict:
+        try:
+            with open(PENTA_RESULTS_STATE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            # First run: mark every already-known Penta result as announced
+            # (channel isn't configured yet) so /setpentaresults doesn't
+            # immediately dump the whole season's history once it's set.
+            state = {"channel_id": None,
+                     "announced": [_result_key(d, s, m) for d, s, m in _all_results(rr_schedule.DATA)
+                                   if _is_penta_match(m)]}
+            self._save_penta_results_state(state)
+            return state
+
+    def _save_penta_results_state(self, state: dict | None = None):
+        tmp = PENTA_RESULTS_STATE + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(state or self.penta_state, f)
+        os.replace(tmp, PENTA_RESULTS_STATE)
+
+    def _new_penta_results(self) -> dict:
+        """division -> [(stage, match), ...] involving a Penta team, not announced yet."""
+        announced = set(self.penta_state["announced"])
+        fresh = defaultdict(list)
+        for div, stage, m in _all_results(rr_schedule.DATA):
+            if not _is_penta_match(m):
+                continue
             if _result_key(div, stage, m) not in announced:
                 fresh[div].append((stage, m))
         return fresh
@@ -421,6 +463,39 @@ class RRSync(commands.Cog):
                 self.state["announced"].append(_result_key(div, stage, m))
             count += len(entries)
         self._save_results_state()
+        return count
+
+    async def _announce_penta_results(self) -> int:
+        channel_id = self.penta_state.get("channel_id")
+        if not channel_id:
+            return 0
+        fresh = self._new_penta_results()
+        if not fresh:
+            return 0
+        channel = self.bot.get_channel(channel_id)
+        if channel is None:
+            try:
+                channel = await self.bot.fetch_channel(channel_id)
+            except discord.HTTPException:
+                print(f"[rr_sync] penta results channel {channel_id} not reachable")
+                return 0
+        count = 0
+        for div, entries in fresh.items():
+            embed = discord.Embed(title=f"{DIV_EMOJI.get(div, '')} RRS8 {div.upper()} — PENTA MATCH RESULTS",
+                                  color=DIV_COLORS.get(div, 0x5865F2))
+            by_stage = defaultdict(list)
+            for stage, m in entries:
+                by_stage[stage].append(m)
+            for stage, ms in by_stage.items():
+                lines = "\n".join(f"**{rr_schedule.format_result(m)}**  ·  {m['date']}"
+                                  + (" (forfeit)" if m["result"]["ff"] else "") for m in ms)
+                embed.add_field(name=stage, value=lines[:1024], inline=False)
+            embed.set_footer(text="Pentathletes teams only • Use /standings and /powerrankings for the bigger picture")
+            await channel.send(embed=embed)
+            for stage, m in entries:
+                self.penta_state["announced"].append(_result_key(div, stage, m))
+            count += len(entries)
+        self._save_penta_results_state()
         return count
 
     async def sync_once(self) -> str:
@@ -471,6 +546,9 @@ class RRSync(commands.Cog):
         announced = await self._announce_results()
         if announced:
             self.last_result += f" | announced {announced} new result(s)"
+        penta_announced = await self._announce_penta_results()
+        if penta_announced:
+            self.last_result += f" | penta-announced {penta_announced} new result(s)"
         if unknown_all:
             notes = "; ".join(f"{d}: {len(u)} unknown banner(s) {u}" for d, u in unknown_all.items())
             self.last_result += f" | NEW TEAMS NEED MAPPING — {notes}"
@@ -498,6 +576,17 @@ class RRSync(commands.Cog):
         self._save_results_state()
         await interaction.response.send_message(
             f"New RRS8 match results will be posted in {channel.mention}.", ephemeral=True)
+
+    @app_commands.command(name="setpentaresults",
+                          description="Admin: set (or move) the channel where only Penta teams' RRS8 match results get posted")
+    @app_commands.describe(channel="Channel for Penta-only result announcements")
+    @app_commands.default_permissions(manage_guild=True)
+    async def setpentaresults(self, interaction: discord.Interaction, channel: discord.TextChannel):
+        self.penta_state["channel_id"] = channel.id
+        self._save_penta_results_state()
+        await interaction.response.send_message(
+            f"New RRS8 match results for **Penta teams only** ({', '.join(sorted(PENTA_TEAMS))}) "
+            f"will be posted in {channel.mention}.", ephemeral=True)
 
     @app_commands.command(name="syncschedule",
                           description="Admin: re-pull the RRS8 schedules from the official sheets now")
