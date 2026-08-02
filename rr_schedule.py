@@ -118,15 +118,22 @@ def unscheduled_stages(division: str) -> list:
     return out
 
 
-def standings(division: str, stage: str | None = None) -> list:
+PRESEASON_STAGE = "Pre-Season"
+
+
+def standings(division: str, stage: str | None = None, include_preseason: bool = True) -> list:
     """Sorted standings rows for one stage, or aggregated across all played
-    stages when stage is None. Rows: {team, pts, w, l, gw, gl, gf, ga}."""
+    stages when stage is None. Rows: {team, pts, w, l, gw, gl, gf, ga}.
+    When aggregating (stage is None), include_preseason=False drops Pre-Season
+    results from the total."""
     blocks = DATA["divisions"][division].get("standings", {})
     if stage:
         rows = [dict(r) for r in blocks.get(stage, [])]
     else:
         agg: dict[str, dict] = {}
-        for block in blocks.values():
+        for stage_name, block in blocks.items():
+            if not include_preseason and stage_name == PRESEASON_STAGE:
+                continue
             for r in block:
                 a = agg.setdefault(r["team"], {"team": r["team"], "pts": 0, "w": 0, "l": 0,
                                                "gw": 0, "gl": 0, "gf": 0, "ga": 0})
@@ -138,8 +145,11 @@ def standings(division: str, stage: str | None = None) -> list:
     return rows
 
 
-def standings_stages(division: str) -> list:
-    return list(DATA["divisions"][division].get("standings", {}).keys())
+def standings_stages(division: str, include_preseason: bool = True) -> list:
+    stages = list(DATA["divisions"][division].get("standings", {}).keys())
+    if not include_preseason:
+        stages = [s for s in stages if s != PRESEASON_STAGE]
+    return stages
 
 
 def _opponent_records(division: str) -> dict:
