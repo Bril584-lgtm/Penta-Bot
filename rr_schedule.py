@@ -118,22 +118,15 @@ def unscheduled_stages(division: str) -> list:
     return out
 
 
-PRESEASON_STAGE = "Pre-Season"
-
-
-def standings(division: str, stage: str | None = None, include_preseason: bool = True) -> list:
+def standings(division: str, stage: str | None = None) -> list:
     """Sorted standings rows for one stage, or aggregated across all played
-    stages when stage is None. Rows: {team, pts, w, l, gw, gl, gf, ga}.
-    When aggregating (stage is None), include_preseason=False drops Pre-Season
-    results from the total."""
+    stages when stage is None. Rows: {team, pts, w, l, gw, gl, gf, ga}."""
     blocks = DATA["divisions"][division].get("standings", {})
     if stage:
         rows = [dict(r) for r in blocks.get(stage, [])]
     else:
         agg: dict[str, dict] = {}
-        for stage_name, block in blocks.items():
-            if not include_preseason and stage_name == PRESEASON_STAGE:
-                continue
+        for block in blocks.values():
             for r in block:
                 a = agg.setdefault(r["team"], {"team": r["team"], "pts": 0, "w": 0, "l": 0,
                                                "gw": 0, "gl": 0, "gf": 0, "ga": 0})
@@ -145,17 +138,16 @@ def standings(division: str, stage: str | None = None, include_preseason: bool =
     return rows
 
 
-def standings_stages(division: str, include_preseason: bool = True) -> list:
-    stages = list(DATA["divisions"][division].get("standings", {}).keys())
-    if not include_preseason:
-        stages = [s for s in stages if s != PRESEASON_STAGE]
-    return stages
+def standings_stages(division: str) -> list:
+    return list(DATA["divisions"][division].get("standings", {}).keys())
 
 
-def _opponent_records(division: str) -> dict:
+def _opponent_records(division: str, stage: str | None = None) -> dict:
     """team -> list of opponents faced in completed matches."""
     faced = {}
     for st in stages(division):
+        if stage and st["stage"] != stage:
+            continue
         for m in st["matches"]:
             if "result" not in m:
                 continue
@@ -165,15 +157,16 @@ def _opponent_records(division: str) -> dict:
     return faced
 
 
-def power_rankings(division: str) -> list:
-    """Computed rating per team, best first.
+def power_rankings(division: str, stage: str | None = None) -> list:
+    """Computed rating per team, best first, for one stage or aggregated across
+    all played stages when stage is None.
 
     rating = 100*win% + 12*(game diff per match) + 4*(goal +/- per game)
              + 25*(avg opponent win% — strength of schedule)
     """
-    rows = standings(division)
+    rows = standings(division, stage)
     winpct = {r["team"]: (r["w"] / (r["w"] + r["l"]) if r["w"] + r["l"] else 0.0) for r in rows}
-    faced = _opponent_records(division)
+    faced = _opponent_records(division, stage)
     ranked = []
     for r in rows:
         gp = r["w"] + r["l"]

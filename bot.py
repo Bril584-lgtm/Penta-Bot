@@ -429,17 +429,14 @@ def _standings_lines(rows: list) -> list:
 
 
 @bot.tree.command(name="standings", description="RRS8 team standings — official league numbers")
-@app_commands.describe(
-    division="Which division", stage="Optional: a single stage (default: season so far)",
-    include_preseason="Season-so-far only: count Pre-Season results in the total (default: True)",
-)
+@app_commands.describe(division="Which division", stage="Optional: a single stage (default: season so far)")
 @app_commands.choices(
     division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS],
     stage=[app_commands.Choice(name=s, value=s) for s in
            ["Pre-Season", "Split 1", "Major 1", "Split 2", "Major 2"]],
 )
 async def standings_cmd(interaction: discord.Interaction, division: app_commands.Choice[str],
-                        stage: app_commands.Choice[str] = None, include_preseason: bool = True):
+                        stage: app_commands.Choice[str] = None):
     div = division.value
     stage_name = stage.value if stage else None
     if stage_name and stage_name not in rr_schedule.standings_stages(div):
@@ -447,17 +444,11 @@ async def standings_cmd(interaction: discord.Interaction, division: app_commands
             f"No results for **{stage_name}** in {div} yet. Stages with results: "
             f"{', '.join(rr_schedule.standings_stages(div)) or 'none'}", ephemeral=True)
         return
-    rows = rr_schedule.standings(div, stage_name, include_preseason=include_preseason)
+    rows = rr_schedule.standings(div, stage_name)
     if not rows:
         await interaction.response.send_message(f"No results reported in {div} yet.", ephemeral=True)
         return
-    if stage_name:
-        scope = stage_name
-    else:
-        played = rr_schedule.standings_stages(div, include_preseason=include_preseason)
-        scope = f"Season so far ({', '.join(played)})"
-        if not include_preseason:
-            scope += " — Pre-Season excluded"
+    scope = stage_name or f"Season so far ({', '.join(rr_schedule.standings_stages(div))})"
     embed = discord.Embed(title=f"{DIV_EMOJI[div]} RRS8 {div.upper()} — STANDINGS",
                           description=f"**{scope}**", color=DIV_COLORS[div])
     lines = _standings_lines(rows)
@@ -469,18 +460,31 @@ async def standings_cmd(interaction: discord.Interaction, division: app_commands
 
 
 @bot.tree.command(name="powerrankings", description="RRS8 power rankings — computed from results, not just points")
-@app_commands.describe(division="Which division")
-@app_commands.choices(division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS])
-async def powerrankings(interaction: discord.Interaction, division: app_commands.Choice[str]):
+@app_commands.describe(division="Which division", stage="Optional: a single stage (default: season so far)")
+@app_commands.choices(
+    division=[app_commands.Choice(name=d, value=d) for d in rr_schedule.DIVISIONS],
+    stage=[app_commands.Choice(name=s, value=s) for s in
+           ["Pre-Season", "Split 1", "Major 1", "Split 2", "Major 2"]],
+)
+async def powerrankings(interaction: discord.Interaction, division: app_commands.Choice[str],
+                        stage: app_commands.Choice[str] = None):
     div = division.value
-    ranked = rr_schedule.power_rankings(div)
+    stage_name = stage.value if stage else None
+    if stage_name and stage_name not in rr_schedule.standings_stages(div):
+        await interaction.response.send_message(
+            f"No results for **{stage_name}** in {div} yet. Stages with results: "
+            f"{', '.join(rr_schedule.standings_stages(div)) or 'none'}", ephemeral=True)
+        return
+    ranked = rr_schedule.power_rankings(div, stage_name)
     if not any(r["rating"] for r in ranked):
         await interaction.response.send_message(f"No results reported in {div} yet.", ephemeral=True)
         return
+    scope = stage_name or f"Season so far ({', '.join(rr_schedule.standings_stages(div))})"
     embed = discord.Embed(
         title=f"{DIV_EMOJI[div]} RRS8 {div.upper()} — POWER RANKINGS",
         description="Rating blends win %, game differential, goal differential, "
-                    "and strength of schedule — so who you beat matters, not just how often.",
+                    "and strength of schedule — so who you beat matters, not just how often."
+                    f"\n\n**{scope}**",
         color=DIV_COLORS[div])
     lines = []
     for i, r in enumerate(ranked, 1):
